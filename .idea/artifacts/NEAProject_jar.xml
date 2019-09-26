@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NEAProject:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/NEAProject_jar</output-path>
+    <root id="archive" name="NEAProject.jar">
+      <element id="module-output" name="NEAProject" />
+    </root>
+  </artifact>
+</component>
