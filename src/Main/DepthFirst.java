@@ -1,117 +1,25 @@
 package Main;
 
-interface rePaint {
-    void onRepaint();
-}
-
-class RP implements rePaint {
-    @Override
-    public void onRepaint() {
-        new DepthFirst().repaint();
-    }
-}
-
-/*class DepthFirstThread extends Thread {
-
-    private rePaint rp;
-
-    public void run() {
-        rp = new RP();
-        depthFirstGeneration(Maze.startX, Maze.startY);
-    }
-
-    public void depthFirstGeneration(int x, int y) { // up = 1, right = 2, down = 3, left = 4
-        Maze.cell[x][y] = 1;
-        //Maze.rpaint();
-        rp.onRepaint();
-        try {
-            Thread.sleep(10);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        int[] directions = getDirections();
-        for (int i = 0; i < 4; i++) {
-
-            switch (directions[i]) {
-                case 1: // up
-                    if (y - 2 <= 0) // check if going up would go outside of the maze
-                        continue;
-                    if (Maze.cell[x][y - 2] == 0) { // check that the space is available
-                        Maze.cell[x][y - 1] = 1;
-                        Maze.cell[x][y - 2] = 1;
-                        depthFirstGeneration(x, y - 2);
-                    }
-                    break;
-                case 2: // right
-                    if (x + 2 >= 42)
-                        continue;
-                    if (Maze.cell[x + 2][y] == 0) {
-                        Maze.cell[x + 1][y] = 1;
-                        Maze.cell[x + 2][y] = 1;
-                        depthFirstGeneration(x + 2, y);
-                    }
-                    break;
-                case 3: // down
-                    if (y + 2 >= 42)
-                        continue;
-                    if (Maze.cell[x][y + 2] == 0) {
-                        Maze.cell[x][y + 1] = 1;
-                        Maze.cell[x][y + 2] = 1;
-                        depthFirstGeneration(x, y + 2);
-                    }
-                    break;
-                case 4: // left
-                    if (x - 2 <= 0)
-                        continue;
-                    if (Maze.cell[x - 2][y] == 0) {
-                        Maze.cell[x - 1][y] = 1;
-                        Maze.cell[x - 2][y] = 1;
-                        depthFirstGeneration(x - 2, y);
-                    }
-                    break;
-            }
-        }
-    }
-
-    public int[] getDirections() {
-        int[] directions = {1, 2, 3, 4};
-        int[] shuffle = new int[4];
-        for (int i = 0; i < directions.length; i++) {
-            int rand = Maze.random.nextInt(directions.length);
-            while (directions[rand] == 0) {
-                rand = Maze.random.nextInt(directions.length);
-            }
-            int temp = directions[rand];
-            directions[rand] = 0;
-            shuffle[i] = temp;
-        }
-        return shuffle;
-    }
-
-}*/
-
-public class DepthFirst extends Maze implements Runnable {
+public class DepthFirst extends Maze {
 
     DepthFirst() {
         super.initMaze();
     }
 
     public void run() {
-        depthFirstGeneration(Maze.startX, Maze.startY);
+        super.run();
+        startGen();
+        super.complete = true;
+        repaint();
     }
 
     public void startGen() {
         depthFirstGeneration(super.startX, super.startY);
     }
 
-    public void depthFirstGeneration(int x, int y) { // up = 1, right = 2, down = 3, left = 4
+    public void depthFirstGeneration(int x, int y) {
         super.cell[x][y] = Mark.CURRENT;
-        /*try {
-            Thread.sleep(10);
-        } catch (Exception e) {
-            System.out.println(e);
-        }*/
-        Dir[] directions = getDirections();
+        Direction[] directions = getDirections();
         for (int i = 0; i < directions.length; i++) {
 
             switch (directions[i]) {
@@ -122,6 +30,7 @@ public class DepthFirst extends Maze implements Runnable {
                         super.cell[x][y] = Mark.PATH; // sets 'current' cell to no longer be current
                         super.cell[x][y - 1] = Mark.PATH; // sets the spaces ahead to a path
                         super.cell[x][y - 2] = Mark.PATH;
+                        animate();
                         depthFirstGeneration(x, y - 2); // call the same subroutine using the new coordinates
                     }
                     break;
@@ -132,6 +41,7 @@ public class DepthFirst extends Maze implements Runnable {
                         super.cell[x][y] = Mark.PATH;
                         super.cell[x][y + 1] = Mark.PATH;
                         super.cell[x][y + 2] = Mark.PATH;
+                        animate();
                         depthFirstGeneration(x, y + 2);
                     }
                     break;
@@ -142,6 +52,7 @@ public class DepthFirst extends Maze implements Runnable {
                         super.cell[x][y] = Mark.PATH;
                         super.cell[x - 1][y] = Mark.PATH;
                         super.cell[x - 2][y] = Mark.PATH;
+                        animate();
                         depthFirstGeneration(x - 2, y);
                     }
                     break;
@@ -152,26 +63,25 @@ public class DepthFirst extends Maze implements Runnable {
                         super.cell[x][y] = Mark.PATH;
                         super.cell[x + 1][y] = Mark.PATH;
                         super.cell[x + 2][y] = Mark.PATH;
+                        animate();
                         depthFirstGeneration(x + 2, y);
                     }
                     break;
             }
         }
-        this.repaint();
-        this.revalidate();
     }
 
-    public Dir[] getDirections() {
-        Dir[] directions = {Dir.UP, Dir.DOWN, Dir.LEFT, Dir.RIGHT};
-        Dir[] shuffle = new Dir[4];
+    public Direction[] getDirections() {
+        Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT}; // create an array with the 4 valid directions
+        Direction[] shuffle = new Direction[4]; // create an empty array for the shuffled set of directions
         for (int i = 0; i < directions.length; i++) {
-            int rand = super.random.nextInt(directions.length);
-            while (directions[rand] == Dir.NULL) {
-                rand = super.random.nextInt(directions.length);
+            int rand = super.random.nextInt(directions.length); // choose a random number from 0-3
+            while (directions[rand] == Direction.NULL) { // if the direction it chooses is not valid
+                rand = super.random.nextInt(directions.length); // continue generating numbers until it can choose a valid direction
             }
-            Dir temp = directions[rand];
-            directions[rand] = Dir.NULL;
-            shuffle[i] = temp;
+            Direction temp = directions[rand]; // get the chosen direction
+            directions[rand] = Direction.NULL; // set the space to null
+            shuffle[i] = temp; // put the chosen direction in the correct space in the shuffled array
         }
         return shuffle;
     }

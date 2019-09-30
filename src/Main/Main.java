@@ -17,34 +17,36 @@ public class Main {
 
         Border empty;
         empty = BorderFactory.createEmptyBorder(30, 30, 30, 30); //makes border
+        Component buffer = Box.createRigidArea(new Dimension(0, 10));
 
-        JFrame frame = new JFrame("Maze Tool"); //creating main frame for gui, must have
+        JFrame frame = new JFrame("MazeTool"); //creating main frame for gui, must have
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //set it to close on "x"
         frame.setSize(500, 750); //manually sets default size
         frame.getRootPane().setBorder(empty); //adds border
+        frame.setLocationRelativeTo(null); // gets the window to open in the middle of the screen
 
-        BoxLayout bx = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
-        frame.setLayout(bx);
+        BoxLayout bx = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS); // creates box layout
+        frame.setLayout(bx); // sets layout
 
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(); // creates main panel
 
-        JPanel text = new JPanel();
+        JPanel text = new JPanel(); // create text panel
         JLabel title = new JLabel();
-        title.setText("MazeTool");
-        title.setFont(new Font(null, Font.PLAIN, 30));
+        title.setText("MazeTool"); // create title label
+        title.setFont(new Font(null, Font.PLAIN, 30)); // set size to 30, using default font
         JLabel version = new JLabel();
-        version.setText("v. 0.1.1");
+        version.setText("v. 0.1.5"); // version number
         text.add(title);
         text.add(version);
 
-        JPanel genDrop = new JPanel();
+        JPanel genDrop = new JPanel(); // create drop box for choosing generation algorithms
         String[] genAlgorithms = {"Depth-first search", "Randomised Kruskal's algorithm", "Randomized Prim's algorithm"};
         JComboBox genList = new JComboBox(genAlgorithms);
         genDrop.add(new JLabel("Generate maze using: "));
         genDrop.add(genList);
 
         JPanel animation = new DepthFirst();
-        animation.setPreferredSize(new Dimension(mazeSize * 10 + 20, mazeSize * 10 + 20));
+        animation.setPreferredSize(new Dimension(mazeSize * 10 + 20, mazeSize * 10 + 20)); // force size of maze panel
 
         JPanel buttons = new JPanel();
         JButton genMaze = new JButton("Generate new maze");
@@ -52,10 +54,7 @@ public class Main {
         genMaze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ((DepthFirst) animation).resetAnimation(); // resets the 'canvas'
-                ((DepthFirst) animation).startTimer(); // starts the animation
-                ((DepthFirst) animation).run();
-                //String genType = genList.getSelectedItem().toString();
+                ((DepthFirst) animation).rerun();
             }
         });
 
@@ -87,19 +86,15 @@ public class Main {
         solveDrop.add(new JLabel("Solve maze using: "));
         solveDrop.add(solveList);
 
-        frame.add(panel);
-        panel.add(text);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(genDrop);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        frame.add(panel); // adding stuff to the frame
+        panel.add(text); panel.add(buffer);
+        panel.add(genDrop); panel.add(buffer);
         panel.add(animation);
-        panel.add(solveDrop);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(solveDrop); panel.add(buffer);
         panel.add(buttons);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         frame.setVisible(true);
-        frame.setResizable(false);
+        frame.setResizable(false); // makes the frame non-resizable
 
     }
 

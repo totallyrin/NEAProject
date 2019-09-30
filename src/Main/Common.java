@@ -3,7 +3,7 @@ package Main;
 public enum Common {
 }
 
-enum Dir {
+enum Direction {
     UP, DOWN, LEFT, RIGHT, NULL
 } // marks for left, right, up and down
 
