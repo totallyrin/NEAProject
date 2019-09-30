@@ -1,6 +1,6 @@
 package Main;
 
-public class DepthFirst extends Maze {
+public class DepthFirst extends GenMaze {
 
     DepthFirst() {
         super.initMaze();
@@ -8,6 +8,7 @@ public class DepthFirst extends Maze {
 
     public void run() {
         super.run();
+       // super.complete = false;
         startGen();
         super.complete = true;
         repaint();
@@ -21,7 +22,6 @@ public class DepthFirst extends Maze {
         super.cell[x][y] = Mark.CURRENT;
         Direction[] directions = getDirections();
         for (int i = 0; i < directions.length; i++) {
-
             switch (directions[i]) {
                 case UP: // up
                     if (y - 2 <= 0) // check if going up would go outside of the maze
@@ -30,7 +30,8 @@ public class DepthFirst extends Maze {
                         super.cell[x][y] = Mark.PATH; // sets 'current' cell to no longer be current
                         super.cell[x][y - 1] = Mark.PATH; // sets the spaces ahead to a path
                         super.cell[x][y - 2] = Mark.PATH;
-                        animate();
+                        super.cell[x][y - 2] = Mark.CURRENT;
+                        super.animate();
                         depthFirstGeneration(x, y - 2); // call the same subroutine using the new coordinates
                     }
                     break;
@@ -41,7 +42,8 @@ public class DepthFirst extends Maze {
                         super.cell[x][y] = Mark.PATH;
                         super.cell[x][y + 1] = Mark.PATH;
                         super.cell[x][y + 2] = Mark.PATH;
-                        animate();
+                        super.cell[x][y + 2] = Mark.CURRENT;
+                        super.animate();
                         depthFirstGeneration(x, y + 2);
                     }
                     break;
@@ -52,7 +54,8 @@ public class DepthFirst extends Maze {
                         super.cell[x][y] = Mark.PATH;
                         super.cell[x - 1][y] = Mark.PATH;
                         super.cell[x - 2][y] = Mark.PATH;
-                        animate();
+                        super.cell[x - 2][y] = Mark.CURRENT;
+                        super.animate();
                         depthFirstGeneration(x - 2, y);
                     }
                     break;
@@ -63,11 +66,15 @@ public class DepthFirst extends Maze {
                         super.cell[x][y] = Mark.PATH;
                         super.cell[x + 1][y] = Mark.PATH;
                         super.cell[x + 2][y] = Mark.PATH;
-                        animate();
+                        super.cell[x + 2][y] = Mark.CURRENT;
+                        super.animate();
                         depthFirstGeneration(x + 2, y);
                     }
                     break;
             }
+        }
+        if (super.cell[x][y] == Mark.CURRENT){
+            super.cell[x][y] = Mark.END;
         }
     }
 

@@ -5,15 +5,13 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-import static Main.Maze.mazeSize;
-
 public class Main {
 
     public static void main(String[] args) {
         buildGUI();
     }
 
-    public static void buildGUI(){
+    public static void buildGUI() {
 
         Border empty;
         empty = BorderFactory.createEmptyBorder(30, 30, 30, 30); //makes border
@@ -35,7 +33,7 @@ public class Main {
         title.setText("MazeTool"); // create title label
         title.setFont(new Font(null, Font.PLAIN, 30)); // set size to 30, using default font
         JLabel version = new JLabel();
-        version.setText("v. 0.1.5"); // version number
+        version.setText("v. 0.1.6"); // version number
         text.add(title);
         text.add(version);
 
@@ -46,7 +44,7 @@ public class Main {
         genDrop.add(genList);
 
         JPanel animation = new DepthFirst();
-        animation.setPreferredSize(new Dimension(mazeSize * 10 + 20, mazeSize * 10 + 20)); // force size of maze panel
+        animation.setPreferredSize(new Dimension(GenMaze.mazeSize * 10 + 20, GenMaze.mazeSize * 10 + 20)); // force size of maze panel
 
         JPanel buttons = new JPanel();
         JButton genMaze = new JButton("Generate new maze");
@@ -87,10 +85,13 @@ public class Main {
         solveDrop.add(solveList);
 
         frame.add(panel); // adding stuff to the frame
-        panel.add(text); panel.add(buffer);
-        panel.add(genDrop); panel.add(buffer);
+        panel.add(text);
+        panel.add(buffer);
+        panel.add(genDrop);
+        panel.add(buffer);
         panel.add(animation);
-        panel.add(solveDrop); panel.add(buffer);
+        panel.add(solveDrop);
+        panel.add(buffer);
         panel.add(buttons);
 
         frame.setVisible(true);
