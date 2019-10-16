@@ -56,7 +56,7 @@ public class Main {
         JPanel maze = new JPanel(); // create main panel to hold maze
         JPanel emptyMaze = new GenMaze(); // create panel for startup, where no maze is displayed
         emptyMaze.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20)); // force size of panel
-        emptyMaze.add(emptyMaze);
+        maze.add(emptyMaze);
         JPanel df = new DepthFirst(); // create panel for depth-first
         df.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
         df.setVisible(false); // set to invisible
