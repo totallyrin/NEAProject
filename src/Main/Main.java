@@ -8,7 +8,7 @@ import javax.swing.border.Border;
 public class Main {
 
     public static void main(String[] args) {
-        buildGUI();
+        buildGUI(); // creates GUI
     }
 
     public static void buildGUI() {
@@ -38,60 +38,60 @@ public class Main {
         text.add(title);
         text.add(version);
 
-        JPanel genDrop = new JPanel(); // create drop box for choosing generation algorithms
-        String[] genAlgorithms = GenMaze.genAlgorithms;
-        JComboBox genList = new JComboBox(genAlgorithms);
+        JPanel genDrop = new JPanel(); // create panel for maze-generation algorithm choice
+        String[] genAlgorithms = GenMaze.genAlgorithms; // gets list of algorithms from GenMaze class
+        JComboBox genList = new JComboBox(genAlgorithms); // creates ComboBox containing algorithms
         genDrop.add(new JLabel("Generate maze using: "));
         genDrop.add(genList);
 
-        JPanel hiddenButton = new JPanel();
-        JRadioButton showGen = new JRadioButton("Show generation", true);
-        JRadioButton hideGen = new JRadioButton("Hide generation");
-        ButtonGroup hidden = new ButtonGroup();
-        hidden.add(showGen);
+        JPanel hiddenButton = new JPanel(); // create panel for choosing to show/hide maze generation
+        JRadioButton showGen = new JRadioButton("Show generation", true); // create button to show generation, default
+        JRadioButton hideGen = new JRadioButton("Hide generation"); // create button to hide gen
+        ButtonGroup hidden = new ButtonGroup(); // create button group
+        hidden.add(showGen); // adds buttons to button group so only one can be selected at any one time
         hidden.add(hideGen);
-        hiddenButton.add(showGen);
+        hiddenButton.add(showGen); // adds buttons to panel
         hiddenButton.add(hideGen);
 
-        JPanel maze = new JPanel();
-        JPanel animation = new GenMaze();
-        animation.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20)); // force size of maze panel
-        maze.add(animation);
-        JPanel df = new DepthFirst();
+        JPanel maze = new JPanel(); // create main panel to hold maze
+        JPanel emptyMaze = new GenMaze(); // create panel for startup, where no maze is displayed
+        emptyMaze.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20)); // force size of panel
+        emptyMaze.add(emptyMaze);
+        JPanel df = new DepthFirst(); // create panel for depth-first
         df.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
-        df.setVisible(false);
+        df.setVisible(false); // set to invisible
         maze.add(df);
-        JPanel hk = new HuntAndKill();
+        JPanel hk = new HuntAndKill(); // create panel for hunt-and-kill
         hk.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
-        hk.setVisible(false);
+        hk.setVisible(false); // set to invisible
         maze.add(hk);
 
-        JPanel buttons = new JPanel();
-        JButton genMaze = new JButton("Generate new maze");
-        genMaze.setAlignmentX(JButton.CENTER_ALIGNMENT);
-        genMaze.addActionListener(new ActionListener() {
+        JPanel buttons = new JPanel(); // create a panel for buttons so they appear side by side
+        JButton genMaze = new JButton("Generate new maze"); // create 'generate new maze' button
+        genMaze.setAlignmentX(JButton.CENTER_ALIGNMENT); // center the button
+        genMaze.addActionListener(new ActionListener() { // when pressed;
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Common.isRunning(((DepthFirst) df).getThread()) && !Common.isRunning(((HuntAndKill) hk).getThread())) {
-                    animation.setVisible(false);
-                    df.setVisible(false);
+                if (!Common.isRunning(((DepthFirst) df).getThread()) && !Common.isRunning(((HuntAndKill) hk).getThread())) { // check that no mazes are being generated
+                    emptyMaze.setVisible(false); // hide empty maze panel
+                    df.setVisible(false); // make sure all maze panels are hidden
                     hk.setVisible(false);
-                    if (genList.getSelectedItem().equals(genAlgorithms[0])) {
-                        if (showGen.isSelected()) {
-                            ((DepthFirst) df).hidden = false;
+                    if (genList.getSelectedItem().equals(genAlgorithms[0])) { // if depth-first is selected
+                        if (showGen.isSelected()) { // if show generation is selected
+                            ((DepthFirst) df).hidden = false; // set 'hidden' to false, meaning the maze generation will be animated
                         } else {
-                            ((DepthFirst) df).hidden = true;
+                            ((DepthFirst) df).hidden = true; // set 'hidden' to true, meaning generation process will not be shown
                         }
-                        ((DepthFirst) df).rerun();
-                        df.setVisible(true);
-                    } else if (genList.getSelectedItem().equals(genAlgorithms[1])) {
-                        if (showGen.isSelected()) {
+                        ((DepthFirst) df).rerun(); // create maze
+                        df.setVisible(true); // show maze panel
+                    } else if (genList.getSelectedItem().equals(genAlgorithms[1])) { // if hunt-and-kill is selected
+                        if (showGen.isSelected()) { // if show generation is selected
                             ((HuntAndKill) hk).hidden = false;
                         } else {
                             ((HuntAndKill) hk).hidden = true;
                         }
-                        ((HuntAndKill) hk).rerun();
-                        hk.setVisible(true);
+                        ((HuntAndKill) hk).rerun(); // create maze
+                        hk.setVisible(true); // show maze panel
                     }
                 }
             }
@@ -125,8 +125,8 @@ public class Main {
         solveDrop.add(new JLabel("Solve maze using: "));
         solveDrop.add(solveList);
 
-        frame.add(panel); // adding stuff to the frame
-        panel.add(text);
+        frame.add(panel); // adds main panel to frame
+        panel.add(text); // adding things to the panel
         panel.add(buffer);
         panel.add(genDrop);
         panel.add(hiddenButton);
@@ -136,7 +136,7 @@ public class Main {
         panel.add(buffer);
         panel.add(buttons);
 
-        frame.setVisible(true);
+        frame.setVisible(true); // make the window visible
         frame.setResizable(false); // makes the frame non-resizable
 
     }
