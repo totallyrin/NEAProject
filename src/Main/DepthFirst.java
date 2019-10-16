@@ -30,7 +30,8 @@ public class DepthFirst extends GenMaze {
                         super.cell[x][y - 1] = Mark.PATH; // sets the spaces ahead to a path
                         super.cell[x][y - 2] = Mark.PATH;
                         super.cell[x][y - 2] = Mark.CURRENT;
-                        super.animate();
+                        if (!this.hidden)
+                            super.animate();
                         depthFirstGeneration(x, y - 2); // call the same subroutine using the new coordinates
                     }
                     break;
@@ -42,7 +43,8 @@ public class DepthFirst extends GenMaze {
                         super.cell[x][y + 1] = Mark.PATH;
                         super.cell[x][y + 2] = Mark.PATH;
                         super.cell[x][y + 2] = Mark.CURRENT;
-                        super.animate();
+                        if (!this.hidden)
+                            super.animate();
                         depthFirstGeneration(x, y + 2);
                     }
                     break;
@@ -54,7 +56,8 @@ public class DepthFirst extends GenMaze {
                         super.cell[x - 1][y] = Mark.PATH;
                         super.cell[x - 2][y] = Mark.PATH;
                         super.cell[x - 2][y] = Mark.CURRENT;
-                        super.animate();
+                        if (!this.hidden)
+                            super.animate();
                         depthFirstGeneration(x - 2, y);
                     }
                     break;
@@ -66,7 +69,8 @@ public class DepthFirst extends GenMaze {
                         super.cell[x + 1][y] = Mark.PATH;
                         super.cell[x + 2][y] = Mark.PATH;
                         super.cell[x + 2][y] = Mark.CURRENT;
-                        super.animate();
+                        if (!this.hidden)
+                            super.animate();
                         depthFirstGeneration(x + 2, y);
                     }
                     break;

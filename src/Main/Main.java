@@ -22,7 +22,7 @@ public class Main {
         frame.setSize(500, 750); //manually sets default size
         frame.getRootPane().setBorder(empty); //adds border
         frame.setLocationRelativeTo(null); // gets the window to open in the middle of the screen
-        frame.setIconImage((new ImageIcon("img/icon3.png").getImage())); // sets icon image of jframe
+        frame.setIconImage((new ImageIcon("img/icon.png").getImage())); // sets icon image of jframe
 
         BoxLayout bx = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS); // creates box layout
         frame.setLayout(bx); // sets layout
@@ -34,7 +34,7 @@ public class Main {
         title.setText("MazeTool"); // create title label
         title.setFont(new Font(null, Font.PLAIN, 30)); // set size to 30, using default font
         JLabel version = new JLabel();
-        version.setText("v. 0.2.0"); // version number
+        version.setText("v. 0.2.2"); // version number
         text.add(title);
         text.add(version);
 
@@ -53,19 +53,6 @@ public class Main {
         hiddenButton.add(showGen);
         hiddenButton.add(hideGen);
 
-        JPanel hiddenGen = new JPanel();
-        hiddenGen.setLayout(new BorderLayout());
-        hiddenGen.setBackground(Color.DARK_GRAY);
-        Icon loadingGif = new ImageIcon("img/loading (1).gif");
-        JLabel loading = new JLabel(loadingGif);
-        JLabel loadtext = new JLabel("Generating Maze . . .");
-        loadtext.setFont(new Font(null, Font.PLAIN, 20));
-        hiddenGen.add(loading);
-        loadtext.setVerticalAlignment(SwingConstants.CENTER);
-        loading.setVerticalAlignment(SwingConstants.CENTER);
-        hiddenGen.setVisible(false);
-        hiddenGen.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
-
         JPanel maze = new JPanel();
         JPanel animation = new GenMaze();
         animation.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20)); // force size of maze panel
@@ -78,7 +65,6 @@ public class Main {
         hk.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
         hk.setVisible(false);
         maze.add(hk);
-        maze.add(hiddenGen);
 
         JPanel buttons = new JPanel();
         JButton genMaze = new JButton("Generate new maze");
@@ -92,19 +78,20 @@ public class Main {
                     hk.setVisible(false);
                     if (genList.getSelectedItem().equals(genAlgorithms[0])) {
                         if (showGen.isSelected()) {
-                            df.setVisible(true);
+                            ((DepthFirst) df).hidden = false;
                         } else {
-                            hiddenGen.setVisible(true);
+                            ((DepthFirst) df).hidden = true;
                         }
                         ((DepthFirst) df).rerun();
-                        //hiddenGen.setVisible(false);
-                        //df.setVisible(true);
+                        df.setVisible(true);
                     } else if (genList.getSelectedItem().equals(genAlgorithms[1])) {
-                        if (showGen.isSelected())
-                            hk.setVisible(true);
-                        else
-                            animation.setVisible(true);
+                        if (showGen.isSelected()) {
+                            ((HuntAndKill) hk).hidden = false;
+                        } else {
+                            ((HuntAndKill) hk).hidden = true;
+                        }
                         ((HuntAndKill) hk).rerun();
+                        hk.setVisible(true);
                     }
                 }
             }

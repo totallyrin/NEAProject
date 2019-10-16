@@ -9,6 +9,7 @@ public class GenMaze extends JPanel implements Runnable {
     public static String[] genAlgorithms = {"Depth-first / Recursive Backtracker", "Hunt-and-Kill algorithm"}; //, "Randomised Kruskal's algorithm", "Randomized Prim's algorithm"};
     volatile static Mark[][] cell = new Mark[Common.mazeSize][Common.mazeSize]; // creates the grid of cells used for the maze
     public boolean complete = false;
+    public boolean hidden = false;
     public int speed = 100;
     Color bg;
 
@@ -50,6 +51,10 @@ public class GenMaze extends JPanel implements Runnable {
                         g.setColor(bg);
                         g.fillRect(xx * 10 + 10, yy * 10 + 10, 10, 10);
                         break;
+                    case SEARCH:
+                        g.setColor(Common.yellow);
+                        g.fillRect(xx * 10 + 10, yy * 10 + 10, 10, 10);
+                        break;
                     case END:
                         if (!complete) {
                             g.setColor(Common.blue);
@@ -71,13 +76,13 @@ public class GenMaze extends JPanel implements Runnable {
         }
     }
 
-    public void animate() {
+    public void animate(int speed) {
         repaint();
-        try {
-            Thread.sleep(speed);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        Common.sleep(speed);
+    }
+
+    public void animate() {
+        animate(speed);
     }
 
     @Override
@@ -91,10 +96,6 @@ public class GenMaze extends JPanel implements Runnable {
             speed = 100;
             thread.start();
         }
-    }
-
-    public void stop() {
-        thread.interrupt();
     }
 
     public Thread getThread() {

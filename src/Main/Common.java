@@ -7,7 +7,7 @@ public class Common {
 
     public static final int mazeSize = 35; // set the maze size
     volatile static int startX = 1, startY = 1, endX = mazeSize - 1, endY = mazeSize - 1;
-    public static Color red = new Color(247, 73, 57), blue = new Color(0, 149, 255);
+    public static Color red = new Color(247, 73, 57), blue = new Color(0, 149, 255), yellow = new Color(255, 187, 0);
     static Random random = new Random();
 
     public static Direction[] getDirections() {
@@ -52,6 +52,14 @@ public class Common {
             neighbour = Direction.DOWN;
         return neighbour;
 
+    }
+
+    public static void sleep (int time){
+        try {
+            Thread.sleep(time);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static boolean isRunning(Thread thread) {

@@ -8,6 +8,6 @@ enum Direction {
 } // marks for left, right, up and down
 
 enum Mark {
-    WALL, PATH, CURRENT, END, NULL
+    WALL, PATH, CURRENT, END, SEARCH, NULL
 } // marks for wall, path, end or current cell
 
