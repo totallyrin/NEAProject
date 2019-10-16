@@ -8,19 +8,18 @@ public class DepthFirst extends GenMaze {
 
     public void run() {
         super.run();
-       // super.complete = false;
         startGen();
         super.complete = true;
         repaint();
     }
 
     public void startGen() {
-        depthFirstGeneration(super.startX, super.startY);
+        depthFirstGeneration(Common.startX, Common.startY);
     }
 
     public void depthFirstGeneration(int x, int y) {
         super.cell[x][y] = Mark.CURRENT;
-        Direction[] directions = getDirections();
+        Direction[] directions = Common.getDirections();
         for (int i = 0; i < directions.length; i++) {
             switch (directions[i]) {
                 case UP: // up
@@ -36,7 +35,7 @@ public class DepthFirst extends GenMaze {
                     }
                     break;
                 case DOWN: // down
-                    if (y + 2 >= mazeSize)
+                    if (y + 2 >= Common.mazeSize)
                         continue;
                     if (super.cell[x][y + 2] == Mark.WALL) {
                         super.cell[x][y] = Mark.PATH;
@@ -60,7 +59,7 @@ public class DepthFirst extends GenMaze {
                     }
                     break;
                 case RIGHT: // right
-                    if (x + 2 >= mazeSize)
+                    if (x + 2 >= Common.mazeSize)
                         continue;
                     if (super.cell[x + 2][y] == Mark.WALL) {
                         super.cell[x][y] = Mark.PATH;
@@ -73,24 +72,9 @@ public class DepthFirst extends GenMaze {
                     break;
             }
         }
-        if (super.cell[x][y] == Mark.CURRENT){
+        if (super.cell[x][y] == Mark.CURRENT) {
             super.cell[x][y] = Mark.END;
         }
-    }
-
-    public Direction[] getDirections() {
-        Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT}; // create an array with the 4 valid directions
-        Direction[] shuffle = new Direction[4]; // create an empty array for the shuffled set of directions
-        for (int i = 0; i < directions.length; i++) {
-            int rand = super.random.nextInt(directions.length); // choose a random number from 0-3
-            while (directions[rand] == Direction.NULL) { // if the direction it chooses is not valid
-                rand = super.random.nextInt(directions.length); // continue generating numbers until it can choose a valid direction
-            }
-            Direction temp = directions[rand]; // get the chosen direction
-            directions[rand] = Direction.NULL; // set the space to null
-            shuffle[i] = temp; // put the chosen direction in the correct space in the shuffled array
-        }
-        return shuffle;
     }
 
 }

@@ -15,13 +15,14 @@ public class Main {
 
         Border empty;
         empty = BorderFactory.createEmptyBorder(30, 30, 30, 30); //makes border
-        Component buffer = Box.createRigidArea(new Dimension(0, 10));
+        Component buffer = Box.createRigidArea(new Dimension(0, 10)); // creates a rigid area, used for spacing components
 
         JFrame frame = new JFrame("MazeTool"); //creating main frame for gui, must have
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //set it to close on "x"
         frame.setSize(500, 750); //manually sets default size
         frame.getRootPane().setBorder(empty); //adds border
         frame.setLocationRelativeTo(null); // gets the window to open in the middle of the screen
+        frame.setIconImage((new ImageIcon("img/icon3.png").getImage())); // sets icon image of jframe
 
         BoxLayout bx = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS); // creates box layout
         frame.setLayout(bx); // sets layout
@@ -33,18 +34,51 @@ public class Main {
         title.setText("MazeTool"); // create title label
         title.setFont(new Font(null, Font.PLAIN, 30)); // set size to 30, using default font
         JLabel version = new JLabel();
-        version.setText("v. 0.1.6"); // version number
+        version.setText("v. 0.2.0"); // version number
         text.add(title);
         text.add(version);
 
         JPanel genDrop = new JPanel(); // create drop box for choosing generation algorithms
-        String[] genAlgorithms = {"Depth-first search", "Randomised Kruskal's algorithm", "Randomized Prim's algorithm"};
+        String[] genAlgorithms = GenMaze.genAlgorithms;
         JComboBox genList = new JComboBox(genAlgorithms);
         genDrop.add(new JLabel("Generate maze using: "));
         genDrop.add(genList);
 
-        JPanel animation = new DepthFirst();
-        animation.setPreferredSize(new Dimension(GenMaze.mazeSize * 10 + 20, GenMaze.mazeSize * 10 + 20)); // force size of maze panel
+        JPanel hiddenButton = new JPanel();
+        JRadioButton showGen = new JRadioButton("Show generation", true);
+        JRadioButton hideGen = new JRadioButton("Hide generation");
+        ButtonGroup hidden = new ButtonGroup();
+        hidden.add(showGen);
+        hidden.add(hideGen);
+        hiddenButton.add(showGen);
+        hiddenButton.add(hideGen);
+
+        JPanel hiddenGen = new JPanel();
+        hiddenGen.setLayout(new BorderLayout());
+        hiddenGen.setBackground(Color.DARK_GRAY);
+        Icon loadingGif = new ImageIcon("img/loading (1).gif");
+        JLabel loading = new JLabel(loadingGif);
+        JLabel loadtext = new JLabel("Generating Maze . . .");
+        loadtext.setFont(new Font(null, Font.PLAIN, 20));
+        hiddenGen.add(loading);
+        loadtext.setVerticalAlignment(SwingConstants.CENTER);
+        loading.setVerticalAlignment(SwingConstants.CENTER);
+        hiddenGen.setVisible(false);
+        hiddenGen.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
+
+        JPanel maze = new JPanel();
+        JPanel animation = new GenMaze();
+        animation.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20)); // force size of maze panel
+        maze.add(animation);
+        JPanel df = new DepthFirst();
+        df.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
+        df.setVisible(false);
+        maze.add(df);
+        JPanel hk = new HuntAndKill();
+        hk.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
+        hk.setVisible(false);
+        maze.add(hk);
+        maze.add(hiddenGen);
 
         JPanel buttons = new JPanel();
         JButton genMaze = new JButton("Generate new maze");
@@ -52,7 +86,27 @@ public class Main {
         genMaze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ((DepthFirst) animation).rerun();
+                if (!Common.isRunning(((DepthFirst) df).getThread()) && !Common.isRunning(((HuntAndKill) hk).getThread())) {
+                    animation.setVisible(false);
+                    df.setVisible(false);
+                    hk.setVisible(false);
+                    if (genList.getSelectedItem().equals(genAlgorithms[0])) {
+                        if (showGen.isSelected()) {
+                            df.setVisible(true);
+                        } else {
+                            hiddenGen.setVisible(true);
+                        }
+                        ((DepthFirst) df).rerun();
+                        //hiddenGen.setVisible(false);
+                        //df.setVisible(true);
+                    } else if (genList.getSelectedItem().equals(genAlgorithms[1])) {
+                        if (showGen.isSelected())
+                            hk.setVisible(true);
+                        else
+                            animation.setVisible(true);
+                        ((HuntAndKill) hk).rerun();
+                    }
+                }
             }
         });
 
@@ -79,7 +133,7 @@ public class Main {
         buttons.setAlignmentY(JPanel.TOP_ALIGNMENT);
 
         JPanel solveDrop = new JPanel();
-        String[] solveAlgorithms = {"Random Mouse algorithm", "Wall Follower", "Tremeaux's algorithm"};
+        String[] solveAlgorithms = SolveMaze.solveAlgorithms;
         JComboBox solveList = new JComboBox(solveAlgorithms);
         solveDrop.add(new JLabel("Solve maze using: "));
         solveDrop.add(solveList);
@@ -88,8 +142,9 @@ public class Main {
         panel.add(text);
         panel.add(buffer);
         panel.add(genDrop);
+        panel.add(hiddenButton);
         panel.add(buffer);
-        panel.add(animation);
+        panel.add(maze);
         panel.add(solveDrop);
         panel.add(buffer);
         panel.add(buttons);
