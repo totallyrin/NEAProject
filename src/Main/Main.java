@@ -34,7 +34,7 @@ public class Main {
         title.setText("MazeTool"); // create title label
         title.setFont(new Font(null, Font.PLAIN, 30)); // set size to 30, using default font
         JLabel version = new JLabel();
-        version.setText("v. 0.2.2"); // version number
+        version.setText("v. 0.3.1"); // version number
         text.add(title);
         text.add(version);
 
@@ -66,6 +66,11 @@ public class Main {
         hk.setVisible(false); // set to invisible
         maze.add(hk);
 
+        JPanel ds = new DepthSolve();
+        ds.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
+        ds.setVisible(false); // set to invisible
+        maze.add(ds);
+
         JPanel buttons = new JPanel(); // create a panel for buttons so they appear side by side
         JButton genMaze = new JButton("Generate new maze"); // create 'generate new maze' button
         genMaze.setAlignmentX(JButton.CENTER_ALIGNMENT); // center the button
@@ -76,6 +81,7 @@ public class Main {
                     emptyMaze.setVisible(false); // hide empty maze panel
                     df.setVisible(false); // make sure all maze panels are hidden
                     hk.setVisible(false);
+                    ((DepthSolve) ds).setVisible(false);
                     if (genList.getSelectedItem().equals(genAlgorithms[0])) { // if depth-first is selected
                         if (showGen.isSelected()) { // if show generation is selected
                             ((DepthFirst) df).hidden = false; // set 'hidden' to false, meaning the maze generation will be animated
@@ -97,12 +103,23 @@ public class Main {
             }
         });
 
+        String[] solveAlgorithms = SolveMaze.solveAlgorithms;
+        JComboBox solveList = new JComboBox(solveAlgorithms);
         JButton solveMaze = new JButton("Solve maze");
         solveMaze.setAlignmentX(JButton.CENTER_ALIGNMENT);
         solveMaze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (!Common.isRunning(((DepthFirst) df).getThread()) && !Common.isRunning(((HuntAndKill) hk).getThread())) { // check that no mazes are being generated
+                    emptyMaze.setVisible(false); // hide empty maze panel
+                    df.setVisible(false); // make sure all maze panels are hidden
+                    hk.setVisible(false);
+                    ((DepthSolve) ds).setVisible(false);
+                    if (solveList.getSelectedItem().equals(solveAlgorithms[0])) {
+                        ((DepthSolve) ds).setVisible(true);
+                        ((DepthSolve) ds).rerun();
+                    }
+                }
             }
         });
 
@@ -120,8 +137,6 @@ public class Main {
         buttons.setAlignmentY(JPanel.TOP_ALIGNMENT);
 
         JPanel solveDrop = new JPanel();
-        String[] solveAlgorithms = SolveMaze.solveAlgorithms;
-        JComboBox solveList = new JComboBox(solveAlgorithms);
         solveDrop.add(new JLabel("Solve maze using: "));
         solveDrop.add(solveList);
 

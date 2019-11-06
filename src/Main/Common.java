@@ -7,8 +7,10 @@ public class Common {
 
     public static final int mazeSize = 35; // set the maze size
     volatile static int startX = 1, startY = 1, endX = mazeSize - 1, endY = mazeSize - 1;
-    public static Color red = new Color(247, 73, 57), blue = new Color(0, 149, 255), yellow = new Color(255, 187, 0);
+    public static Color bg = new Color(238, 238, 238), red = new Color(247, 73, 57), blue = new Color(0, 149, 255), yellow = new Color(255, 187, 0);
     static Random random = new Random();
+    public static Mark[][] currentMaze = new Mark[mazeSize][mazeSize];
+    public static int speed = 100;
 
     public static Direction[] getDirections() {
         Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT}; // create an array with the 4 valid directions
