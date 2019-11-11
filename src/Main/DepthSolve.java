@@ -7,8 +7,8 @@ public class DepthSolve extends SolveMaze {
     }
 
     public void run() {
+        super.clearSolution();
         super.run();
-        super.maze = Common.currentMaze;
         startGen();
         super.maze = complete(super.maze);
         repaint();
@@ -25,13 +25,14 @@ public class DepthSolve extends SolveMaze {
         }
         if (super.complete)
             return;
-        super.maze[x][y] = Mark.CURRENT;
         Direction[] directions = Common.getDirections();
         for (int i = 0; i < directions.length; i++) {
             switch (directions[i]) {
                 case UP: // up
                     if (y - 1 <= 0) // check if going up would go outside of the maze
                         continue;
+                    if (super.complete)
+                        return;
                     if (super.maze[x][y - 1] == Mark.PATH) { // check that the space is available
                         super.maze[x][y] = Mark.ROUTE;
                         super.maze[x][y - 1] = Mark.CURRENT;
@@ -43,6 +44,8 @@ public class DepthSolve extends SolveMaze {
                 case DOWN: // down
                     if (y + 1 >= Common.mazeSize)
                         continue;
+                    if (super.complete)
+                        return;
                     if (super.maze[x][y + 1] == Mark.PATH) {
                         super.maze[x][y] = Mark.ROUTE;
                         super.maze[x][y + 1] = Mark.CURRENT;
@@ -54,6 +57,8 @@ public class DepthSolve extends SolveMaze {
                 case LEFT: // left
                     if (x - 1 <= 0)
                         continue;
+                    if (super.complete)
+                        return;
                     if (super.maze[x - 1][y] == Mark.PATH) {
                         super.maze[x][y] = Mark.ROUTE;
                         super.maze[x - 1][y] = Mark.CURRENT;
@@ -65,6 +70,8 @@ public class DepthSolve extends SolveMaze {
                 case RIGHT: // right
                     if (x + 1 >= Common.mazeSize)
                         continue;
+                    if (super.complete)
+                        return;
                     if (super.maze[x + 1][y] == Mark.PATH) {
                         super.maze[x][y] = Mark.ROUTE;
                         super.maze[x + 1][y] = Mark.CURRENT;

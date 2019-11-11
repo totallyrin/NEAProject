@@ -15,7 +15,18 @@ public abstract class SolveMaze extends Maze {
     @Override
     public void initMaze() { // initialises the maze
         super.maze = Common.currentMaze;
+        complete = false;
     }
+
+    public void clearSolution(){
+        for (int x = 0; x < Common.mazeSize; x++) {
+            for (int y = 0; y < Common.mazeSize; y++) {
+                if (super.maze[x][y] == Mark.ROUTE)
+                    super.maze[x][y] = Mark.PATH;
+            }
+        }
+    }
+
 
     @Override
     public void animate(){

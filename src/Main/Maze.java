@@ -9,7 +9,7 @@ public abstract class Maze extends JPanel implements Runnable {
     Mark[][] maze = new Mark[Common.mazeSize][Common.mazeSize];
     public boolean complete = false;
     public boolean hidden = false;
-
+    Mark[][] currentMaze = new Mark[Common.mazeSize][Common.mazeSize];
     public void resetAnimation() { // sets all cells in the maze to 'walls' and repaints the 'canvas'
         initMaze();
         repaint();

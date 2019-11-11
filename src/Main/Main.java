@@ -34,7 +34,7 @@ public class Main {
         title.setText("MazeTool"); // create title label
         title.setFont(new Font(null, Font.PLAIN, 30)); // set size to 30, using default font
         JLabel version = new JLabel();
-        version.setText("v. 0.3.1"); // version number
+        version.setText("v. 0.3.2"); // version number
         text.add(title);
         text.add(version);
 
@@ -78,26 +78,28 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!Common.isRunning(((DepthFirst) df).getThread()) && !Common.isRunning(((HuntAndKill) hk).getThread())) { // check that no mazes are being generated
-                    emptyMaze.setVisible(false); // hide empty maze panel
-                    df.setVisible(false); // make sure all maze panels are hidden
-                    hk.setVisible(false);
-                    ((DepthSolve) ds).setVisible(false);
-                    if (genList.getSelectedItem().equals(genAlgorithms[0])) { // if depth-first is selected
-                        if (showGen.isSelected()) { // if show generation is selected
-                            ((DepthFirst) df).hidden = false; // set 'hidden' to false, meaning the maze generation will be animated
-                        } else {
-                            ((DepthFirst) df).hidden = true; // set 'hidden' to true, meaning generation process will not be shown
+                    if (!Common.isRunning(((DepthSolve) ds).getThread())) {
+                        emptyMaze.setVisible(false); // hide empty maze panel
+                        df.setVisible(false); // make sure all maze panels are hidden
+                        hk.setVisible(false);
+                        ((DepthSolve) ds).setVisible(false);
+                        if (genList.getSelectedItem().equals(genAlgorithms[0])) { // if depth-first is selected
+                            if (showGen.isSelected()) { // if show generation is selected
+                                ((DepthFirst) df).hidden = false; // set 'hidden' to false, meaning the maze generation will be animated
+                            } else {
+                                ((DepthFirst) df).hidden = true; // set 'hidden' to true, meaning generation process will not be shown
+                            }
+                            ((DepthFirst) df).rerun(); // create maze
+                            df.setVisible(true); // show maze panel
+                        } else if (genList.getSelectedItem().equals(genAlgorithms[1])) { // if hunt-and-kill is selected
+                            if (showGen.isSelected()) { // if show generation is selected
+                                ((HuntAndKill) hk).hidden = false;
+                            } else {
+                                ((HuntAndKill) hk).hidden = true;
+                            }
+                            ((HuntAndKill) hk).rerun(); // create maze
+                            hk.setVisible(true); // show maze panel
                         }
-                        ((DepthFirst) df).rerun(); // create maze
-                        df.setVisible(true); // show maze panel
-                    } else if (genList.getSelectedItem().equals(genAlgorithms[1])) { // if hunt-and-kill is selected
-                        if (showGen.isSelected()) { // if show generation is selected
-                            ((HuntAndKill) hk).hidden = false;
-                        } else {
-                            ((HuntAndKill) hk).hidden = true;
-                        }
-                        ((HuntAndKill) hk).rerun(); // create maze
-                        hk.setVisible(true); // show maze panel
                     }
                 }
             }
