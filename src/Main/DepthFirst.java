@@ -11,16 +11,16 @@ public class DepthFirst extends GenMaze {
         startGen();
         super.complete = true;
         repaint();
-        Common.currentMaze = super.complete(super.maze);
+        currentMaze = super.complete(super.maze);
     }
 
     public void startGen() {
-        depthFirstGeneration(Common.startX, Common.startY);
+        depthFirstGeneration(startX, startY);
     }
 
     public void depthFirstGeneration(int x, int y) {
         super.maze[x][y] = Mark.CURRENT;
-        Direction[] directions = Common.getDirections();
+        Direction[] directions = getDirections();
         for (int i = 0; i < directions.length; i++) {
             switch (directions[i]) {
                 case UP: // up
@@ -36,7 +36,7 @@ public class DepthFirst extends GenMaze {
                     }
                     break;
                 case DOWN: // down
-                    if (y + 2 >= Common.mazeSize)
+                    if (y + 2 >= mazeSize)
                         continue;
                     if (super.maze[x][y + 2] == Mark.WALL) {
                         super.maze[x][y] = Mark.PATH;
@@ -60,7 +60,7 @@ public class DepthFirst extends GenMaze {
                     }
                     break;
                 case RIGHT: // right
-                    if (x + 2 >= Common.mazeSize)
+                    if (x + 2 >= mazeSize)
                         continue;
                     if (super.maze[x + 2][y] == Mark.WALL) {
                         super.maze[x][y] = Mark.PATH;

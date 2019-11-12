@@ -15,17 +15,17 @@ public class DepthSolve extends SolveMaze {
     }
 
     public void startGen() {
-        wallFollow(Common.startX, Common.startY);
+        wallFollow(startX, startY);
     }
 
-    public void wallFollow(int x, int y){
-        if (x == Common.endX - 1 && y == Common.endY - 1) {
+    public void wallFollow(int x, int y) {
+        if (x == endX - 1 && y == endY - 1) {
             super.complete = true;
             super.maze[x][y] = Mark.ROUTE;
         }
         if (super.complete)
             return;
-        Direction[] directions = Common.getDirections();
+        Direction[] directions = getDirections();
         for (int i = 0; i < directions.length; i++) {
             switch (directions[i]) {
                 case UP: // up
@@ -42,7 +42,7 @@ public class DepthSolve extends SolveMaze {
                     }
                     break;
                 case DOWN: // down
-                    if (y + 1 >= Common.mazeSize)
+                    if (y + 1 >= mazeSize)
                         continue;
                     if (super.complete)
                         return;
@@ -68,7 +68,7 @@ public class DepthSolve extends SolveMaze {
                     }
                     break;
                 case RIGHT: // right
-                    if (x + 1 >= Common.mazeSize)
+                    if (x + 1 >= mazeSize)
                         continue;
                     if (super.complete)
                         return;

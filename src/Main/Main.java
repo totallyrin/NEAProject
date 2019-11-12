@@ -12,7 +12,6 @@ public class Main {
     }
 
     public static void buildGUI() {
-
         Border empty;
         empty = BorderFactory.createEmptyBorder(30, 30, 30, 30); //makes border
         Component buffer = Box.createRigidArea(new Dimension(0, 10)); // creates a rigid area, used for spacing components
@@ -34,7 +33,7 @@ public class Main {
         title.setText("MazeTool"); // create title label
         title.setFont(new Font(null, Font.PLAIN, 30)); // set size to 30, using default font
         JLabel version = new JLabel();
-        version.setText("v. 0.3.2"); // version number
+        version.setText("v. 0.3.3"); // version number
         text.add(title);
         text.add(version);
 
@@ -55,19 +54,19 @@ public class Main {
 
         JPanel maze = new JPanel(); // create main panel to hold maze
         JPanel emptyMaze = new GenMaze(); // create panel for startup, where no maze is displayed
-        emptyMaze.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20)); // force size of panel
+        emptyMaze.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20)); // force size of panel
         maze.add(emptyMaze);
         JPanel df = new DepthFirst(); // create panel for depth-first
-        df.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
+        df.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
         df.setVisible(false); // set to invisible
         maze.add(df);
         JPanel hk = new HuntAndKill(); // create panel for hunt-and-kill
-        hk.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
+        hk.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
         hk.setVisible(false); // set to invisible
         maze.add(hk);
 
         JPanel ds = new DepthSolve();
-        ds.setPreferredSize(new Dimension(Common.mazeSize * 10 + 20, Common.mazeSize * 10 + 20));
+        ds.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
         ds.setVisible(false); // set to invisible
         maze.add(ds);
 
@@ -77,8 +76,8 @@ public class Main {
         genMaze.addActionListener(new ActionListener() { // when pressed;
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Common.isRunning(((DepthFirst) df).getThread()) && !Common.isRunning(((HuntAndKill) hk).getThread())) { // check that no mazes are being generated
-                    if (!Common.isRunning(((DepthSolve) ds).getThread())) {
+                if (!Maze.isActive()) { // check that no mazes are being generated
+                    if (!Maze.isRunning(((DepthSolve) ds).getThread())) {
                         emptyMaze.setVisible(false); // hide empty maze panel
                         df.setVisible(false); // make sure all maze panels are hidden
                         hk.setVisible(false);
@@ -112,13 +111,12 @@ public class Main {
         solveMaze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Common.isRunning(((DepthFirst) df).getThread()) && !Common.isRunning(((HuntAndKill) hk).getThread())) { // check that no mazes are being generated
-                    emptyMaze.setVisible(false); // hide empty maze panel
+                if (!Maze.isActive()) { // check that no mazes are being generated
                     df.setVisible(false); // make sure all maze panels are hidden
                     hk.setVisible(false);
-                    ((DepthSolve) ds).setVisible(false);
+                    ds.setVisible(false);
                     if (solveList.getSelectedItem().equals(solveAlgorithms[0])) {
-                        ((DepthSolve) ds).setVisible(true);
+                        ds.setVisible(true);
                         ((DepthSolve) ds).rerun();
                     }
                 }
@@ -130,12 +128,28 @@ public class Main {
         clrMaze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (!Maze.isActive()) { // check that no mazes are being generated
+                    emptyMaze.setVisible(false); // hide empty maze panel
+                    df.setVisible(false); // make sure all maze panels are hidden
+                    hk.setVisible(false);
+                    ((DepthSolve) ds).clearSolution();
+                    ds.setVisible(true);
+                }
+            }
+        });
 
+        JButton stopAll = new JButton("Stop all");
+        stopAll.setAlignmentX(Component.CENTER_ALIGNMENT);
+        stopAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Maze.stopAll();
             }
         });
         buttons.add(genMaze);
         buttons.add(solveMaze);
         buttons.add(clrMaze);
+        buttons.add(stopAll);
         buttons.setAlignmentY(JPanel.TOP_ALIGNMENT);
 
         JPanel solveDrop = new JPanel();
@@ -155,7 +169,6 @@ public class Main {
 
         frame.setVisible(true); // make the window visible
         frame.setResizable(false); // makes the frame non-resizable
-
     }
 
 }
