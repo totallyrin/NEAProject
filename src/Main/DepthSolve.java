@@ -9,16 +9,18 @@ public class DepthSolve extends SolveMaze {
     public void run() {
         super.clearSolution();
         super.run();
-        startGen();
+        depthSolve(startX, startY);
         super.maze = complete(super.maze);
-        repaint();
+        this.hidden = false;
+        if (!stop)
+            repaint();
     }
 
-    public void startGen() {
-        wallFollow(startX, startY);
-    }
-
-    public void wallFollow(int x, int y) {
+    private void depthSolve(int x, int y) {
+        if (stop) {
+            this.hidden = true;
+            return;
+        }
         if (x == endX - 1 && y == endY - 1) {
             super.complete = true;
             super.maze[x][y] = Mark.ROUTE;
@@ -26,8 +28,8 @@ public class DepthSolve extends SolveMaze {
         if (super.complete)
             return;
         Direction[] directions = getDirections();
-        for (int i = 0; i < directions.length; i++) {
-            switch (directions[i]) {
+        for (Direction direction : directions) {
+            switch (direction) {
                 case UP: // up
                     if (y - 1 <= 0) // check if going up would go outside of the maze
                         continue;
@@ -38,7 +40,7 @@ public class DepthSolve extends SolveMaze {
                         super.maze[x][y - 1] = Mark.CURRENT;
                         if (!this.hidden)
                             super.animate();
-                        wallFollow(x, y - 1);
+                        depthSolve(x, y - 1);
                     }
                     break;
                 case DOWN: // down
@@ -51,7 +53,7 @@ public class DepthSolve extends SolveMaze {
                         super.maze[x][y + 1] = Mark.CURRENT;
                         if (!this.hidden)
                             super.animate();
-                        wallFollow(x, y + 1);
+                        depthSolve(x, y + 1);
                     }
                     break;
                 case LEFT: // left
@@ -64,7 +66,7 @@ public class DepthSolve extends SolveMaze {
                         super.maze[x - 1][y] = Mark.CURRENT;
                         if (!this.hidden)
                             super.animate();
-                        wallFollow(x - 1, y);
+                        depthSolve(x - 1, y);
                     }
                     break;
                 case RIGHT: // right
@@ -77,7 +79,7 @@ public class DepthSolve extends SolveMaze {
                         super.maze[x + 1][y] = Mark.CURRENT;
                         if (!this.hidden)
                             super.animate();
-                        wallFollow(x + 1, y);
+                        depthSolve(x + 1, y);
                     }
                     break;
                 default:

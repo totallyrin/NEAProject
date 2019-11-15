@@ -5,8 +5,8 @@ import java.awt.*;
 
 public abstract class SolveMaze extends Maze {
 
-    public static String[] solveAlgorithms = {"Depth-first / Recursive Backtracker"}; //, "Tremeaux's algorithm"};
-    boolean clear = false;
+    static String[] solveAlgorithms = {"Depth-first / Recursive Backtracker"}; //, "Tremeaux's algorithm"};
+    private boolean clear = false;
 
     SolveMaze() {
         initMaze();
@@ -14,19 +14,20 @@ public abstract class SolveMaze extends Maze {
     }
 
     @Override
-    public void initMaze() { // initialises the maze
-        super.maze = currentMaze;
+    public void initMaze() { // initialises the super.maze
+        super.maze = Main.currentMaze;
         complete = false;
+        stop = false;
     }
 
-    public void clearSolution() {
+    void clearSolution() {
+        initMaze();
         for (int x = 0; x < mazeSize; x++) {
             for (int y = 0; y < mazeSize; y++) {
                 if (super.maze[x][y] == Mark.ROUTE)
                     super.maze[x][y] = Mark.PATH;
             }
         }
-        complete = false;
         clear = true;
         repaint();
         clear = false;
@@ -40,25 +41,26 @@ public abstract class SolveMaze extends Maze {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        super.maze = Main.currentMaze;
         if (clear) {
             g.setColor(bg);
-            maze[1][0] = Mark.PATH;
+            super.maze[1][0] = Mark.PATH;
         } else {
             g.setColor(Color.ORANGE);
-            maze[1][0] = Mark.ROUTE; // joins start square to maze
+            super.maze[1][0] = Mark.ROUTE; // joins start square to super.maze
         }
         g.fillRect(20, 0, 10, 20); // start square
         if (complete) {
             g.setColor(Color.ORANGE);
-            maze[mazeSize - 2][mazeSize - 1] = Mark.ROUTE;
+            super.maze[mazeSize - 2][mazeSize - 1] = Mark.ROUTE;
         } else {
             g.setColor(bg);
-            maze[mazeSize - 2][mazeSize - 1] = Mark.PATH; // joins end square to maze
+            super.maze[mazeSize - 2][mazeSize - 1] = Mark.PATH; // joins end square to super.maze
         }
         g.fillRect(mazeSize * 10 - 10, mazeSize * 10 + 10, 10, 10); // end square
         for (int y = 0; y < mazeSize; y++) {
             for (int x = 0; x < mazeSize; x++) {
-                switch (maze[x][y]) {
+                switch (super.maze[x][y]) {
                     case WALL:
                         g.setColor(Color.DARK_GRAY);
                         g.fillRect(x * 10 + 10, y * 10 + 10, 10, 10);

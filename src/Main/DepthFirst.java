@@ -8,21 +8,22 @@ public class DepthFirst extends GenMaze {
 
     public void run() {
         super.run();
-        startGen();
-        super.complete = true;
-        repaint();
-        currentMaze = super.complete(super.maze);
-    }
-
-    public void startGen() {
         depthFirstGeneration(startX, startY);
+        super.complete = true;
+        Main.currentMaze = super.complete(super.maze);
+        if (!stop)
+            repaint();
     }
 
-    public void depthFirstGeneration(int x, int y) {
+    private void depthFirstGeneration(int x, int y) {
+        if (stop) {
+            this.hidden = true;
+            return;
+        }
         super.maze[x][y] = Mark.CURRENT;
         Direction[] directions = getDirections();
-        for (int i = 0; i < directions.length; i++) {
-            switch (directions[i]) {
+        for (Direction direction : directions) {
+            switch (direction) {
                 case UP: // up
                     if (y - 2 <= 0) // check if going up would go outside of the maze
                         continue;

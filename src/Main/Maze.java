@@ -6,20 +6,23 @@ import java.util.Random;
 
 public abstract class Maze extends JPanel implements Runnable {
 
-    protected static Thread thread;
+    private static Random random = new Random();
+
+    private static Thread thread;
+
     final static int mazeSize = 35; // set the maze size
     final int startX = 1, startY = 1, endX = mazeSize - 1, endY = mazeSize - 1;
-    public static Color bg = new Color(238, 238, 238), red = new Color(247, 73, 57), blue = new Color(0, 149, 255), yellow = new Color(255, 187, 0);
-    static Random random = new Random();
-    public static int speed = 100;
+
+    static Color bg = new Color(238, 238, 238), red = new Color(247, 73, 57), blue = new Color(0, 149, 255), yellow = new Color(255, 187, 0);
+    private static int speed = 100;
+
     volatile static boolean stop = false;
+    boolean complete = false;
+    boolean hidden = false;
+
     Mark[][] maze = new Mark[mazeSize][mazeSize];
-    public boolean complete = false;
-    public boolean hidden = false;
-    Mark[][] currentMaze = new Mark[mazeSize][mazeSize];
 
-
-    public void resetAnimation() { // sets all cells in the maze to 'walls' and repaints the 'canvas'
+    private void resetAnimation() { // sets all cells in the maze to 'walls' and repaints the 'canvas'
         initMaze();
         repaint();
     }
@@ -31,6 +34,7 @@ public abstract class Maze extends JPanel implements Runnable {
             }
         }
         complete = false;
+        stop = false;
     }
 
     public void paintComponent(Graphics g, Mark[][] maze) {
@@ -81,7 +85,7 @@ public abstract class Maze extends JPanel implements Runnable {
     }
 
 
-    public Mark[][] complete(Mark[][] maze) {
+    Mark[][] complete(Mark[][] maze) {
         for (int x = 0; x < maze.length; x++) {
             for (int y = 0; y < maze[x].length; y++) {
                 if (maze[x][y] == Mark.CURRENT || maze[x][y] == Mark.END)
@@ -91,7 +95,22 @@ public abstract class Maze extends JPanel implements Runnable {
         return maze;
     }
 
-    public static int checkNeighbours(Mark[][] grid, int x, int y) {
+    static Direction[] getDirections() {
+        Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT}; // create an array with the 4 valid directions
+        Direction[] shuffle = new Direction[4]; // create an empty array for the shuffled set of directions
+        for (int i = 0; i < directions.length; i++) {
+            int rand = random.nextInt(directions.length); // choose a random number from 0-3
+            while (directions[rand] == Direction.NULL) { // if the direction it chooses is not valid
+                rand = random.nextInt(directions.length); // continue generating numbers until it can choose a valid direction
+            }
+            Direction temp = directions[rand]; // get the chosen direction
+            directions[rand] = Direction.NULL; // set the space to null
+            shuffle[i] = temp; // put the chosen direction in the correct space in the shuffled array
+        }
+        return shuffle;
+    }
+
+    static int checkNeighbours(Mark[][] grid, int x, int y) {
         int neighbours = 0;
         if ((x >= 0 && x < grid.length) && (y >= 0 && y < grid[x].length)) {
             if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)
@@ -106,7 +125,7 @@ public abstract class Maze extends JPanel implements Runnable {
         return neighbours;
     }
 
-    public static Direction neighbourDirection(Mark[][] grid, int x, int y) {
+    static Direction neighbourDirection(Mark[][] grid, int x, int y) {
         Direction neighbour = Direction.NULL;
         if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)
             neighbour = Direction.LEFT;
@@ -120,26 +139,7 @@ public abstract class Maze extends JPanel implements Runnable {
 
     }
 
-    public static boolean isRunning(Thread thread) {
-        if (thread == null || thread.getState() == Thread.State.TERMINATED)
-            return false;
-        else
-            return true;
-    }
-
-    public static boolean isActive() {
-        if (isRunning(Maze.thread))
-            return true;
-        else
-            return false;
-    }
-
-    public static void stopAll() {
-        if (isRunning(Maze.thread))
-            Maze.stop = true;
-    }
-
-    public static void sleep(int time) {
+    private static void sleep(int time) {
         try {
             Thread.sleep(time);
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public abstract class Maze extends JPanel implements Runnable {
         }
     }
 
-    public void animate(int speed) {
+    void animate(int speed) {
         repaint();
         sleep(speed);
     }
@@ -161,7 +161,7 @@ public abstract class Maze extends JPanel implements Runnable {
         resetAnimation();
     }
 
-    public void rerun() {
+    void rerun() {
         if (thread == null || thread.getState() == Thread.State.TERMINATED) {
             thread = new Thread(this);
             speed = 100;
@@ -169,22 +169,21 @@ public abstract class Maze extends JPanel implements Runnable {
         }
     }
 
-    public Thread getThread() {
+    Thread getThread() {
         return thread;
     }
 
-    public static Direction[] getDirections() {
-        Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT}; // create an array with the 4 valid directions
-        Direction[] shuffle = new Direction[4]; // create an empty array for the shuffled set of directions
-        for (int i = 0; i < directions.length; i++) {
-            int rand = random.nextInt(directions.length); // choose a random number from 0-3
-            while (directions[rand] == Direction.NULL) { // if the direction it chooses is not valid
-                rand = random.nextInt(directions.length); // continue generating numbers until it can choose a valid direction
-            }
-            Direction temp = directions[rand]; // get the chosen direction
-            directions[rand] = Direction.NULL; // set the space to null
-            shuffle[i] = temp; // put the chosen direction in the correct space in the shuffled array
-        }
-        return shuffle;
+    static boolean isRunning(Thread thread) {
+        return thread != null && thread.getState() != Thread.State.TERMINATED;
     }
+
+    static boolean isActive() {
+        return !isRunning(Maze.thread);
+    }
+
+    static void stopAll() {
+        if (isRunning(thread))
+            stop = true;
+    }
+
 }

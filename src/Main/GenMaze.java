@@ -3,9 +3,9 @@ package Main;
 import java.awt.*;
 import javax.swing.*;
 
-public class GenMaze extends Maze {
+public abstract class GenMaze extends Maze {
 
-    public static String[] genAlgorithms = {"Depth-first / Recursive Backtracker", "Hunt-and-Kill algorithm"}; //, "Randomised Kruskal's algorithm", "Randomized Prim's algorithm"};
+    static String[] genAlgorithms = {"Depth-first / Recursive Backtracker", "Hunt-and-Kill algorithm"}; //, "Randomised Kruskal's algorithm", "Randomized Prim's algorithm"};
 
     GenMaze() {
         super.initMaze();
