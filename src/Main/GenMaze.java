@@ -7,11 +7,6 @@ public abstract class GenMaze extends Maze {
 
     static String[] genAlgorithms = {"Depth-first / Recursive Backtracker", "Hunt-and-Kill algorithm"}; //, "Randomised Kruskal's algorithm", "Randomized Prim's algorithm"};
 
-    GenMaze() {
-        super.initMaze();
-        this.setBackground(Color.DARK_GRAY);
-    }
-
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(bg);
@@ -35,15 +30,15 @@ public abstract class GenMaze extends Maze {
                         g.fillRect(x * 10 + 10, y * 10 + 10, 10, 10);
                         break;
                     case END:
-                        if (!complete) {
+                        if (!completedGen) {
                             g.setColor(blue);
                         } else {
                             g.setColor(bg);
                         }
                         g.fillRect(x * 10 + 10, y * 10 + 10, 10, 10);
                         break;
-                    case CURRENT: // if the cell is the current cell and maze is not complete, paint red, otherwise paint white
-                        if (!complete) {
+                    case CURRENT: // if the cell is the current cell and maze is not completedGen, paint red, otherwise paint white
+                        if (!completedGen) {
                             g.setColor(red);
                         } else {
                             g.setColor(bg);

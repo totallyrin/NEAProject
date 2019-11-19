@@ -1,29 +1,23 @@
 package Main;
 
-import javax.swing.*;
 import java.awt.*;
 
 public abstract class SolveMaze extends Maze {
 
-    static String[] solveAlgorithms = {"Depth-first / Recursive Backtracker"}; //, "Tremeaux's algorithm"};
-    private boolean clear = false;
-
-    SolveMaze() {
-        initMaze();
-        this.setBackground(Color.DARK_GRAY);
-    }
+    static String[] solveAlgorithms = {"Depth-first / Recursive Backtracker", "Dead-end Filling"}; //, "Tremeaux's algorithm"};
+    private boolean clear;
 
     @Override
     public void initMaze() { // initialises the super.maze
         super.maze = Main.currentMaze;
-        complete = false;
+        completedSolve = false;
         stop = false;
     }
 
     void clearSolution() {
         initMaze();
-        for (int x = 0; x < mazeSize; x++) {
-            for (int y = 0; y < mazeSize; y++) {
+        for (int y = 0; y < mazeSize; y++) {
+            for (int x = 0; x < mazeSize; x++) {
                 if (super.maze[x][y] == Mark.ROUTE)
                     super.maze[x][y] = Mark.PATH;
             }
@@ -42,7 +36,7 @@ public abstract class SolveMaze extends Maze {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         super.maze = Main.currentMaze;
-        if (clear) {
+        if (!completedSolve && !isActive()) {
             g.setColor(bg);
             super.maze[1][0] = Mark.PATH;
         } else {
@@ -50,7 +44,7 @@ public abstract class SolveMaze extends Maze {
             super.maze[1][0] = Mark.ROUTE; // joins start square to super.maze
         }
         g.fillRect(20, 0, 10, 20); // start square
-        if (complete) {
+        if (completedSolve) {
             g.setColor(Color.ORANGE);
             super.maze[mazeSize - 2][mazeSize - 1] = Mark.ROUTE;
         } else {
@@ -65,6 +59,7 @@ public abstract class SolveMaze extends Maze {
                         g.setColor(Color.DARK_GRAY);
                         g.fillRect(x * 10 + 10, y * 10 + 10, 10, 10);
                         break;
+                    case NULL:
                     case PATH:
                         g.setColor(bg);
                         g.fillRect(x * 10 + 10, y * 10 + 10, 10, 10);

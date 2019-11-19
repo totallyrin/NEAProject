@@ -13,10 +13,11 @@ public class HuntAndKill extends GenMaze {
         row = 1;
         column = 1;
         huntAndKill(startX, startY);
-        super.complete = true;
-        Main.currentMaze = super.complete(super.maze);
-        if (!stop)
+        if (!stop) {
+            completedGen = true;
+            Main.currentMaze = super.complete(super.maze);
             repaint();
+        }
     }
 
     private void huntAndKill(int x, int y) {
@@ -99,10 +100,10 @@ public class HuntAndKill extends GenMaze {
                 if (!this.hidden)
                     super.animate(25);
                 super.maze[x][y] = temp;
-                if (super.maze[x][y] == Mark.WALL && checkNeighbours(super.maze, x, y) == 1) { // checks that the current maze has only one neighbouring maze
+                if (super.maze[x][y] == Mark.WALL && checkNeighbours(super.maze, x, y, Mark.WALL) == 1) { // checks that the current maze has only one neighbouring maze
                     switch (neighbourDirection(super.maze, x, y)) {
                         case UP:
-                            if (checkNeighbours(super.maze, x, y + 1) == 0) {
+                            if (checkNeighbours(super.maze, x, y + 1, Mark.WALL) == 0) {
                                 super.maze[x][y] = Mark.PATH;
                                 super.maze[x][y + 1] = Mark.PATH;
                                 row = y;
@@ -112,7 +113,7 @@ public class HuntAndKill extends GenMaze {
                             }
                             break;
                         case DOWN:
-                            if (y - 1 > 0 && checkNeighbours(super.maze, x, y - 1) == 0) {
+                            if (y - 1 > 0 && checkNeighbours(super.maze, x, y - 1, Mark.WALL) == 0) {
                                 super.maze[x][y] = Mark.PATH;
                                 super.maze[x][y - 1] = Mark.PATH;
                                 row = y;
@@ -122,7 +123,7 @@ public class HuntAndKill extends GenMaze {
                             }
                             break;
                         case LEFT:
-                            if (checkNeighbours(super.maze, x + 1, y) == 0) {
+                            if (checkNeighbours(super.maze, x + 1, y, Mark.WALL) == 0) {
                                 super.maze[x][y] = Mark.PATH;
                                 super.maze[x + 1][y] = Mark.PATH;
                                 row = y;
@@ -132,7 +133,7 @@ public class HuntAndKill extends GenMaze {
                             }
                             break;
                         case RIGHT:
-                            if (x - 1 > 0 && checkNeighbours(super.maze, x - 1, y) == 0) {
+                            if (x - 1 > 0 && checkNeighbours(super.maze, x - 1, y, Mark.WALL) == 0) {
                                 super.maze[x][y] = Mark.PATH;
                                 super.maze[x - 1][y] = Mark.PATH;
                                 row = y;

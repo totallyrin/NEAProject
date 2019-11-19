@@ -2,17 +2,14 @@ package Main;
 
 public class DepthFirst extends GenMaze {
 
-    DepthFirst() {
-        super.initMaze();
-    }
-
     public void run() {
         super.run();
         depthFirstGeneration(startX, startY);
-        super.complete = true;
-        Main.currentMaze = super.complete(super.maze);
-        if (!stop)
+        if (!stop) {
+            completedGen = true;
+            Main.currentMaze = super.complete(super.maze);
             repaint();
+        }
     }
 
     private void depthFirstGeneration(int x, int y) {

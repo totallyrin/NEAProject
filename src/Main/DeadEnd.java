@@ -1,25 +1,40 @@
 package Main;
 
-public class DepthSolve extends SolveMaze {
+public class DeadEnd extends SolveMaze {
 
     public void run() {
         super.clearSolution();
         super.run();
-        depthSolve(startX, startY);
+        deadEnd(startX, startY);
         super.maze = complete(super.maze);
         this.hidden = false;
         if (!stop)
             repaint();
     }
 
-    private void depthSolve(int x, int y) {
+    private void deadEnd(int x, int y) {
+        if (stop) {
+            this.hidden = true;
+            return;
+        }
+        if (completedSolve)
+            return;
+        for (int j = 1; j < mazeSize; j++) {
+            for (int i = 0; i < mazeSize; i++) {
+                completedSolve = false;
+                endFill(i, j);
+            }
+        }
+        completedSolve = true;
+    }
+
+    private void endFill(int x, int y) {
         if (stop) {
             this.hidden = true;
             return;
         }
         if (x == endX - 1 && y == endY - 1) {
             completedSolve = true;
-            super.maze[x][y] = Mark.ROUTE;
         }
         if (completedSolve)
             return;
@@ -32,11 +47,9 @@ public class DepthSolve extends SolveMaze {
                     if (completedSolve)
                         return;
                     if (super.maze[x][y - 1] == Mark.PATH) { // check that the space is available
-                        super.maze[x][y] = Mark.ROUTE;
-                        super.maze[x][y - 1] = Mark.CURRENT;
-                        if (!this.hidden)
-                            super.animate();
-                        depthSolve(x, y - 1);
+                        super.maze[x][y] = Mark.NULL;
+                        super.maze[x][y - 1] = Mark.NULL;
+                        endFill(x, y - 1);
                     }
                     break;
                 case DOWN: // down
@@ -45,11 +58,9 @@ public class DepthSolve extends SolveMaze {
                     if (completedSolve)
                         return;
                     if (super.maze[x][y + 1] == Mark.PATH) {
-                        super.maze[x][y] = Mark.ROUTE;
-                        super.maze[x][y + 1] = Mark.CURRENT;
-                        if (!this.hidden)
-                            super.animate();
-                        depthSolve(x, y + 1);
+                        super.maze[x][y] = Mark.NULL;
+                        super.maze[x][y + 1] = Mark.NULL;
+                        endFill(x, y + 1);
                     }
                     break;
                 case LEFT: // left
@@ -58,11 +69,9 @@ public class DepthSolve extends SolveMaze {
                     if (completedSolve)
                         return;
                     if (super.maze[x - 1][y] == Mark.PATH) {
-                        super.maze[x][y] = Mark.ROUTE;
-                        super.maze[x - 1][y] = Mark.CURRENT;
-                        if (!this.hidden)
-                            super.animate();
-                        depthSolve(x - 1, y);
+                        super.maze[x][y] = Mark.NULL;
+                        super.maze[x - 1][y] = Mark.NULL;
+                        endFill(x - 1, y);
                     }
                     break;
                 case RIGHT: // right
@@ -71,11 +80,11 @@ public class DepthSolve extends SolveMaze {
                     if (completedSolve)
                         return;
                     if (super.maze[x + 1][y] == Mark.PATH) {
-                        super.maze[x][y] = Mark.ROUTE;
-                        super.maze[x + 1][y] = Mark.CURRENT;
+                        super.maze[x][y] = Mark.NULL;
+                        super.maze[x + 1][y] = Mark.NULL;
                         if (!this.hidden)
                             super.animate();
-                        depthSolve(x + 1, y);
+                        endFill(x + 1, y);
                     }
                     break;
                 default:
@@ -94,5 +103,4 @@ public class DepthSolve extends SolveMaze {
         if (!this.hidden)
             super.animate();
     }
-
 }

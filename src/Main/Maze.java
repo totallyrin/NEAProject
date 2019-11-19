@@ -1,7 +1,10 @@
 package Main;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Random;
 
 public abstract class Maze extends JPanel implements Runnable {
@@ -17,10 +20,15 @@ public abstract class Maze extends JPanel implements Runnable {
     private static int speed = 100;
 
     volatile static boolean stop = false;
-    boolean complete = false;
+    static boolean completedGen = false, completedSolve = false;
     boolean hidden = false;
 
     Mark[][] maze = new Mark[mazeSize][mazeSize];
+
+    Maze() {
+        initMaze();
+        this.setBackground(Color.DARK_GRAY);
+    }
 
     private void resetAnimation() { // sets all cells in the maze to 'walls' and repaints the 'canvas'
         initMaze();
@@ -28,12 +36,12 @@ public abstract class Maze extends JPanel implements Runnable {
     }
 
     public void initMaze() { // initialises the maze, sets all the cells to 'walls'
-        for (int i = 0; i < mazeSize; i++) {
-            for (int j = 0; j < mazeSize; j++) {
-                maze[i][j] = Mark.WALL;
+        for (int y = 0; y < mazeSize; y++) {
+            for (int x = 0; x < mazeSize; x++) {
+                maze[x][y] = Mark.WALL;
             }
         }
-        complete = false;
+        completedGen = false;
         stop = false;
     }
 
@@ -60,15 +68,15 @@ public abstract class Maze extends JPanel implements Runnable {
                         g.fillRect(x * 10 + 10, y * 10 + 10, 10, 10);
                         break;
                     case END:
-                        if (!complete) {
+                        if (!completedGen) {
                             g.setColor(blue);
                         } else {
                             g.setColor(bg);
                         }
                         g.fillRect(x * 10 + 10, y * 10 + 10, 10, 10);
                         break;
-                    case CURRENT: // if the cell is the current cell and maze is not complete, paint red, otherwise paint white
-                        if (!complete) {
+                    case CURRENT: // if the cell is the current cell and maze is not completedGen, paint red, otherwise paint white
+                        if (!completedGen) {
                             g.setColor(red);
                         } else {
                             g.setColor(bg);
@@ -83,7 +91,6 @@ public abstract class Maze extends JPanel implements Runnable {
             }
         }
     }
-
 
     Mark[][] complete(Mark[][] maze) {
         for (int x = 0; x < maze.length; x++) {
@@ -110,16 +117,16 @@ public abstract class Maze extends JPanel implements Runnable {
         return shuffle;
     }
 
-    static int checkNeighbours(Mark[][] grid, int x, int y) {
+    static int checkNeighbours(Mark[][] grid, int x, int y, Mark type) {
         int neighbours = 0;
         if ((x >= 0 && x < grid.length) && (y >= 0 && y < grid[x].length)) {
-            if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)
+            if (x - 1 > 0 && grid[x - 1][y] == type)
                 neighbours++;
-            if (x + 1 < mazeSize && grid[x + 1][y] != Mark.WALL)
+            if (x + 1 < mazeSize && grid[x + 1][y] == type)
                 neighbours++;
-            if (y - 1 > 0 && grid[x][y - 1] != Mark.WALL)
+            if (y - 1 > 0 && grid[x][y - 1] == type)
                 neighbours++;
-            if (y + 1 < mazeSize && grid[x][y + 1] != Mark.WALL)
+            if (y + 1 < mazeSize && grid[x][y + 1] == type)
                 neighbours++;
         }
         return neighbours;
@@ -178,7 +185,7 @@ public abstract class Maze extends JPanel implements Runnable {
     }
 
     static boolean isActive() {
-        return !isRunning(Maze.thread);
+        return isRunning(Maze.thread);
     }
 
     static void stopAll() {
