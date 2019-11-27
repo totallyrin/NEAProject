@@ -21,80 +21,90 @@ public class Main {
     }
 
     private static void buildGUI() {
+        // creates JFrame
+        JFrame frame = new JFrame("MazeTool");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 750);
+        frame.setLocationRelativeTo(null);
+        frame.setIconImage((new ImageIcon("img/icon.png").getImage()));
+
+        // creates border around JFrame
         Border empty;
-        empty = BorderFactory.createEmptyBorder(10, 10, 10, 10); //makes border
+        empty = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+        frame.getRootPane().setBorder(empty);
 
-        JFrame frame = new JFrame("MazeTool"); //creating main frame for gui, must have
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //set it to close on "x"
-        frame.setSize(500, 750); //manually sets default size
-        frame.getRootPane().setBorder(empty); //adds border
-        frame.setLocationRelativeTo(null); // gets the window to open in the middle of the screen
-        frame.setIconImage((new ImageIcon("img/icon.png").getImage())); // sets icon image of jframe
+        // creates box layout
+        BoxLayout bx = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
+        frame.setLayout(bx);
 
-        BoxLayout bx = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS); // creates box layout
-        frame.setLayout(bx); // sets layout
+        // creates main panel
+        JPanel panel = new JPanel();
 
-        JPanel panel = new JPanel(); // creates main panel
-
-        JPanel text = new JPanel(); // create text panel
+        // create text panel, including title and version number, using default font
+        JPanel text = new JPanel();
         JLabel title = new JLabel();
-        title.setText("MazeTool"); // create title label
-        title.setFont(new Font(null, Font.PLAIN, 30)); // set size to 30, using default font
+        title.setText("MazeTool");
+        title.setFont(new Font(null, Font.PLAIN, 30));
         JLabel version = new JLabel();
-        version.setText("v. 0.3.5"); // version number
+        version.setText("v. 0.4.0");
         text.add(title);
         text.add(version);
 
-        JPanel genDrop = new JPanel(); // create panel for maze-generation algorithm choice
+        // create panel for maze-generation algorithm choice, with comboBox to choose which algorithm to use
+        JPanel genDrop = new JPanel();
         String[] genAlgorithms = GenMaze.genAlgorithms; // gets list of algorithms from GenMaze class
-        JComboBox<String> genList = new JComboBox<>(genAlgorithms); // creates ComboBox containing algorithms
+        JComboBox<String> genList = new JComboBox<>(genAlgorithms);
         genDrop.add(new JLabel("Generate maze using: "));
         genDrop.add(genList);
 
-        JPanel hiddenGen = new JPanel(); // create panel for choosing to show/hide maze generation
+        // create panel for choosing to show/hide maze generation
+        JPanel hiddenGen = new JPanel();
         JRadioButton showGen = new JRadioButton("Show generation", true); // create button to show generation, default
-        JRadioButton hideGen = new JRadioButton("Hide generation"); // create button to hide gen
-        ButtonGroup hidden = new ButtonGroup(); // create button group
+        JRadioButton hideGen = new JRadioButton("Hide generation");
+        ButtonGroup hidden = new ButtonGroup();
         hidden.add(showGen); // adds buttons to button group so only one can be selected at any one time
         hidden.add(hideGen);
-        hiddenGen.add(showGen); // adds buttons to panel
+        hiddenGen.add(showGen);
         hiddenGen.add(hideGen);
 
-        JPanel hiddenSolve = new JPanel(); // create panel for choosing to show/hide maze generation
+        // create panel for choosing to show/hide maze generation
+        JPanel hiddenSolve = new JPanel();
         JRadioButton showSolve = new JRadioButton("Show solving", true); // create button to show generation, default
-        JRadioButton hideSolve = new JRadioButton("Hide solving"); // create button to hide gen
-        ButtonGroup hidden2 = new ButtonGroup(); // create button group
+        JRadioButton hideSolve = new JRadioButton("Hide solving");
+        ButtonGroup hidden2 = new ButtonGroup();
         hidden2.add(showSolve); // adds buttons to button group so only one can be selected at any one time
         hidden2.add(hideSolve);
-        hiddenSolve.add(showSolve); // adds buttons to panel
+        hiddenSolve.add(showSolve);
         hiddenSolve.add(hideSolve);
 
-        JPanel maze = new JPanel(); // create main panel to hold maze
+        // create main panel to hold maze
+        JPanel maze = new JPanel();
         JPanel emptyMaze = new DepthFirst(); // create panel for startup, where no maze is displayed
         emptyMaze.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20)); // force size of panel
         maze.add(emptyMaze);
         DepthFirst df = new DepthFirst(); // create panel for depth-first
         df.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        df.setVisible(false); // set to invisible
+        df.setVisible(false);
         maze.add(df);
         HuntAndKill hk = new HuntAndKill(); // create panel for hunt-and-kill
         hk.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        hk.setVisible(false); // set to invisible
+        hk.setVisible(false);
         maze.add(hk);
 
-        DepthSolve ds = new DepthSolve();
+        DepthSolve ds = new DepthSolve(); // create panel for depth-first solving
         ds.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        ds.setVisible(false); // set to invisible
+        ds.setVisible(false);
         maze.add(ds);
-        DeadEnd de = new DeadEnd();
+        DeadEnd de = new DeadEnd(); // create panel for dead-end filling
         de.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
         de.setVisible(false);
         maze.add(de);
 
-        JPanel buttons = new JPanel(); // create a panel for buttons so they appear side by side
-        JButton genMaze = new JButton("Generate new maze"); // create 'generate new maze' button
-        genMaze.setAlignmentX(JButton.CENTER_ALIGNMENT); // center the button
-        genMaze.addActionListener(new ActionListener() { // when pressed;
+        // create a panel for buttons so they appear side by side
+        JPanel buttons = new JPanel();
+        JButton genMaze = new JButton("Generate new maze");
+        genMaze.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        genMaze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!Maze.isActive()) { // check that no mazes are being generated
@@ -116,8 +126,11 @@ public class Main {
             }
         });
 
+        // creates comboBox for choosing maze-solving algorithms
         String[] solveAlgorithms = SolveMaze.solveAlgorithms;
         JComboBox<String> solveList = new JComboBox<>(solveAlgorithms);
+
+        // creates button for starting solving
         JButton solveMaze = new JButton("Solve maze");
         solveMaze.setAlignmentX(JButton.CENTER_ALIGNMENT);
         solveMaze.addActionListener(new ActionListener() {
@@ -141,6 +154,7 @@ public class Main {
             }
         });
 
+        // creates button to clear current solution
         JButton clrMaze = new JButton("Clear solution");
         clrMaze.setAlignmentX(JButton.CENTER_ALIGNMENT);
         clrMaze.addActionListener(new ActionListener() {
@@ -151,11 +165,12 @@ public class Main {
                     hk.setVisible(false);
                     de.setVisible(false);
                     ds.clearSolution();
-                    ds.setVisible(true);
+                    ds.setVisible(true); // shows default panel for maze-solving
                 }
             }
         });
 
+        // added button to stop all current generation/solving
         JButton stopAll = new JButton("Stop all");
         stopAll.setAlignmentX(JButton.CENTER_ALIGNMENT);
         stopAll.addActionListener(new ActionListener() {
@@ -165,6 +180,7 @@ public class Main {
             }
         });
 
+        // added button to export current maze to image
         JButton export = new JButton("Save maze");
         export.setAlignmentX(JButton.CENTER_ALIGNMENT);
         export.addActionListener(new ActionListener() {
@@ -175,18 +191,18 @@ public class Main {
                 maze.paintAll(g2d);
                 g2d.dispose();
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "jpeg", "tiff"));
+                fileChooser.setFileFilter(new FileNameExtensionFilter("PNG, GIF, TIFF", "png", "gif", "tiff"));
                 fileChooser.setDialogTitle("Save maze");
                 int userSelection = fileChooser.showSaveDialog(frame);
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     File fileToSave = fileChooser.getSelectedFile();
                     String file = fileToSave.getAbsolutePath(), type;
-                    if (fileToSave.toString().endsWith(".tiff"))
-                        type = "tiff";
-                    else if (fileToSave.toString().endsWith(".png"))
+                    if (fileToSave.toString().endsWith(".png"))
                         type = "png";
                     else if (fileToSave.toString().endsWith(".gif"))
                         type = "gif";
+                    else if (fileToSave.toString().endsWith(".tiff"))
+                        type = "tiff";
                     else {
                         type = "png"; // force save file as png if not tiff or gif
                         file = (fileToSave.getAbsolutePath() + ".png");
@@ -201,15 +217,18 @@ public class Main {
             }
         });
 
+        // add buttons to button panel
         buttons.add(genMaze);
         buttons.add(solveMaze);
         buttons.add(clrMaze);
         buttons.add(stopAll);
         buttons.setAlignmentY(JPanel.TOP_ALIGNMENT);
 
+        // add extra buttons to second panel, which will appear under the first
         JPanel buttons2 = new JPanel();
         buttons2.add(export);
 
+        // add comboBox to new panel, with label
         JPanel solveDrop = new JPanel();
         solveDrop.add(new JLabel("Solve maze using: "));
         solveDrop.add(solveList);

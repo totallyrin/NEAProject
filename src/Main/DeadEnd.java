@@ -5,27 +5,57 @@ public class DeadEnd extends SolveMaze {
     public void run() {
         super.clearSolution();
         super.run();
-        deadEnd(startX, startY);
+        super.fromStart = false;
+        deadEnd();
+        for (int j = 0; j < mazeSize; j++) {
+            for (int i = 0; i < mazeSize; i++) {
+                if (maze[i][j] == Mark.PATH)
+                    maze[i][j] = Mark.ROUTE;
+            }
+        }
+        super.fromStart = true;
         super.maze = complete(super.maze);
-        this.hidden = false;
         if (!stop)
             repaint();
     }
 
-    private void deadEnd(int x, int y) {
+    private void deadEnd() {
         if (stop) {
             this.hidden = true;
             return;
         }
         if (completedSolve)
             return;
-        for (int j = 1; j < mazeSize; j++) {
-            for (int i = 0; i < mazeSize; i++) {
-                completedSolve = false;
-                endFill(i, j);
+        for (int j = 1; j < mazeSize; j++){
+            for (int i = 0; i < mazeSize; i++){
+                if (stop) {
+                    this.hidden = true;
+                    return;
+                }
+                if (completedSolve)
+                    return;
+                if ((i == startX) && (j == startY)) {
+                    // do nothing
+                }
+                else if ((i == endX-1) && (j == endY)) {
+                    // do nothing
+                    completedSolve = true;
+                    return;
+                }
+                else if (maze[i][j] == Mark.PATH) {
+                    if (checkNeighbours(maze, i, j, Mark.PATH) == 1) {
+                        //maze[i][j] = Mark.END;
+                        //maze[i][j] = Mark.CURRENT;
+                        if (!this.hidden)
+                            animate();
+                        maze[i][j] = Mark.END;
+                        deadEnd();
+                        break;
+                    }
+                }
             }
         }
-        completedSolve = true;
+        //completedSolve = true;
     }
 
     private void endFill(int x, int y) {
@@ -33,74 +63,32 @@ public class DeadEnd extends SolveMaze {
             this.hidden = true;
             return;
         }
-        if (x == endX - 1 && y == endY - 1) {
+        if (x == endX && y == endY) {
+            maze[x][y] = Mark.PATH;
             completedSolve = true;
         }
         if (completedSolve)
             return;
-        Direction[] directions = getDirections();
-        for (Direction direction : directions) {
-            switch (direction) {
-                case UP: // up
-                    if (y - 1 <= 0) // check if going up would go outside of the maze
-                        continue;
-                    if (completedSolve)
-                        return;
-                    if (super.maze[x][y - 1] == Mark.PATH) { // check that the space is available
-                        super.maze[x][y] = Mark.NULL;
-                        super.maze[x][y - 1] = Mark.NULL;
-                        endFill(x, y - 1);
-                    }
-                    break;
-                case DOWN: // down
-                    if (y + 1 >= mazeSize)
-                        continue;
-                    if (completedSolve)
-                        return;
-                    if (super.maze[x][y + 1] == Mark.PATH) {
-                        super.maze[x][y] = Mark.NULL;
-                        super.maze[x][y + 1] = Mark.NULL;
-                        endFill(x, y + 1);
-                    }
-                    break;
-                case LEFT: // left
-                    if (x - 1 <= 0)
-                        continue;
-                    if (completedSolve)
-                        return;
-                    if (super.maze[x - 1][y] == Mark.PATH) {
-                        super.maze[x][y] = Mark.NULL;
-                        super.maze[x - 1][y] = Mark.NULL;
-                        endFill(x - 1, y);
-                    }
-                    break;
-                case RIGHT: // right
-                    if (x + 1 >= mazeSize)
-                        continue;
-                    if (completedSolve)
-                        return;
-                    if (super.maze[x + 1][y] == Mark.PATH) {
-                        super.maze[x][y] = Mark.NULL;
-                        super.maze[x + 1][y] = Mark.NULL;
-                        if (!this.hidden)
-                            super.animate();
-                        endFill(x + 1, y);
-                    }
-                    break;
-                default:
-                    if (super.maze[x][y] == Mark.CURRENT) {
-                        super.maze[x][y] = Mark.END;
-                        if (!this.hidden)
-                            super.animate();
-                    }
-                    break;
-            }
-
+        maze[x][y] = Mark.END;
+        /*switch(neighbourDirection(maze, x, y, Mark.PATH)){
+            case UP:
+                animate();
+                deadEnd(x, y - 1);
+                break;
+            case DOWN:
+                animate();
+                deadEnd(x, y + 1);
+                break;
+            case LEFT:
+                animate();
+                deadEnd(x - 1, y);
+                break;
+            case RIGHT:
+                animate();
+                deadEnd(x + 1, y);
+                break;
         }
-        if (completedSolve)
-            return;
-        super.maze[x][y] = Mark.END;
-        if (!this.hidden)
-            super.animate();
+
+         */
     }
 }

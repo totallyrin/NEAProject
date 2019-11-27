@@ -4,16 +4,19 @@ import java.awt.*;
 
 public abstract class SolveMaze extends Maze {
 
+    // list of maze-solving algorithms
     static String[] solveAlgorithms = {"Depth-first / Recursive Backtracker", "Dead-end Filling"}; //, "Tremeaux's algorithm"};
-    private boolean clear;
+    boolean fromStart = true;
 
+    // initialises the maze
     @Override
-    public void initMaze() { // initialises the super.maze
+    public void initMaze() {
         super.maze = Main.currentMaze;
         completedSolve = false;
         stop = false;
     }
 
+    // sets all 'route' cells to paths
     void clearSolution() {
         initMaze();
         for (int y = 0; y < mazeSize; y++) {
@@ -22,17 +25,16 @@ public abstract class SolveMaze extends Maze {
                     super.maze[x][y] = Mark.PATH;
             }
         }
-        clear = true;
         repaint();
-        clear = false;
     }
 
-
+    // animate at double speed
     @Override
     public void animate() {
         super.animate(50);
     }
 
+    // controls how to paint the panel
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         super.maze = Main.currentMaze;
@@ -40,8 +42,12 @@ public abstract class SolveMaze extends Maze {
             g.setColor(bg);
             super.maze[1][0] = Mark.PATH;
         } else {
-            g.setColor(Color.ORANGE);
-            super.maze[1][0] = Mark.ROUTE; // joins start square to super.maze
+            if (!fromStart)
+                g.setColor(bg);
+            else {
+                g.setColor(Color.ORANGE);
+                super.maze[1][0] = Mark.ROUTE; // joins start square to super.maze
+            }
         }
         g.fillRect(20, 0, 10, 20); // start square
         if (completedSolve) {

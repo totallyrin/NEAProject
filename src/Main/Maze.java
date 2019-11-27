@@ -1,16 +1,12 @@
 package Main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.Random;
 
 public abstract class Maze extends JPanel implements Runnable {
 
     private static Random random = new Random();
-
     private static Thread thread;
 
     final static int mazeSize = 35; // set the maze size
@@ -25,17 +21,20 @@ public abstract class Maze extends JPanel implements Runnable {
 
     Mark[][] maze = new Mark[mazeSize][mazeSize];
 
+    // makes sure panel is blank, and that background colour is dark grey
     Maze() {
         initMaze();
         this.setBackground(Color.DARK_GRAY);
     }
 
-    private void resetAnimation() { // sets all cells in the maze to 'walls' and repaints the 'canvas'
+    // sets all cells in the maze to 'walls' and repaints the 'canvas'
+    private void resetAnimation() {
         initMaze();
         repaint();
     }
 
-    public void initMaze() { // initialises the maze, sets all the cells to 'walls'
+    // initialises the maze, sets all the cells to 'walls'
+    public void initMaze() {
         for (int y = 0; y < mazeSize; y++) {
             for (int x = 0; x < mazeSize; x++) {
                 maze[x][y] = Mark.WALL;
@@ -45,6 +44,7 @@ public abstract class Maze extends JPanel implements Runnable {
         stop = false;
     }
 
+    // create default paint method
     public void paintComponent(Graphics g, Mark[][] maze) {
         super.paintComponent(g);
         g.setColor(bg);
@@ -92,6 +92,7 @@ public abstract class Maze extends JPanel implements Runnable {
         }
     }
 
+    // 'completes' the maze by setting dead ends and current cell to path
     Mark[][] complete(Mark[][] maze) {
         for (int x = 0; x < maze.length; x++) {
             for (int y = 0; y < maze[x].length; y++) {
@@ -102,6 +103,7 @@ public abstract class Maze extends JPanel implements Runnable {
         return maze;
     }
 
+    // returns an array of directions in a random order
     static Direction[] getDirections() {
         Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT}; // create an array with the 4 valid directions
         Direction[] shuffle = new Direction[4]; // create an empty array for the shuffled set of directions
@@ -117,6 +119,23 @@ public abstract class Maze extends JPanel implements Runnable {
         return shuffle;
     }
 
+    // checks for number of neighbouring walls
+    static int checkNeighbours(Mark[][] grid, int x, int y) {
+        int neighbours = 0;
+        if ((x >= 0 && x < grid.length) && (y >= 0 && y < grid[x].length)) {
+            if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)
+                neighbours++;
+            if (x + 1 < mazeSize && grid[x + 1][y] != Mark.WALL)
+                neighbours++;
+            if (y - 1 > 0 && grid[x][y - 1] != Mark.WALL)
+                neighbours++;
+            if (y + 1 < mazeSize && grid[x][y + 1] != Mark.WALL)
+                neighbours++;
+        }
+        return neighbours;
+    }
+
+    // checks for number of neighbouring cells of choice
     static int checkNeighbours(Mark[][] grid, int x, int y, Mark type) {
         int neighbours = 0;
         if ((x >= 0 && x < grid.length) && (y >= 0 && y < grid[x].length)) {
@@ -132,20 +151,37 @@ public abstract class Maze extends JPanel implements Runnable {
         return neighbours;
     }
 
+    // returns the direction of the neighbouring wall
     static Direction neighbourDirection(Mark[][] grid, int x, int y) {
         Direction neighbour = Direction.NULL;
         if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)
             neighbour = Direction.LEFT;
-        if (x + 1 < mazeSize && grid[x + 1][y] != Mark.WALL)
+        else if (x + 1 < mazeSize && grid[x + 1][y] != Mark.WALL)
             neighbour = Direction.RIGHT;
-        if (y - 1 > 0 && grid[x][y - 1] != Mark.WALL)
+        else if (y - 1 > 0 && grid[x][y - 1] != Mark.WALL)
             neighbour = Direction.UP;
-        if (y + 1 < mazeSize && grid[x][y + 1] != Mark.WALL)
+        else if (y + 1 < mazeSize && grid[x][y + 1] != Mark.WALL)
             neighbour = Direction.DOWN;
         return neighbour;
 
     }
 
+    // returns the direction of the neighbouring cell of choice
+    static Direction neighbourDirection(Mark[][] grid, int x, int y, Mark type) {
+        Direction neighbour = Direction.NULL;
+        if (x - 1 > 0 && grid[x - 1][y] == type)
+            neighbour = Direction.LEFT;
+        else if (x + 1 < mazeSize && grid[x + 1][y] == type)
+            neighbour = Direction.RIGHT;
+        else if (y - 1 > 0 && grid[x][y - 1] == type)
+            neighbour = Direction.UP;
+        else if (y + 1 < mazeSize && grid[x][y + 1] == type)
+            neighbour = Direction.DOWN;
+        return neighbour;
+
+    }
+
+    // causes current thread to sleep for x amount of time
     private static void sleep(int time) {
         try {
             Thread.sleep(time);
@@ -154,20 +190,24 @@ public abstract class Maze extends JPanel implements Runnable {
         }
     }
 
+    // controls the animation
     void animate(int speed) {
         repaint();
         sleep(speed);
     }
 
+    // controls the animation with default speed of 100
     public void animate() {
         animate(speed);
     }
 
+    // resets animation when run
     @Override
     public void run() {
         resetAnimation();
     }
 
+    // starts thread as long as no other threads are running
     void rerun() {
         if (thread == null || thread.getState() == Thread.State.TERMINATED) {
             thread = new Thread(this);
@@ -176,18 +216,17 @@ public abstract class Maze extends JPanel implements Runnable {
         }
     }
 
-    Thread getThread() {
-        return thread;
-    }
-
-    static boolean isRunning(Thread thread) {
+    // checks if the specified thread is running
+    private static boolean isRunning(Thread thread) {
         return thread != null && thread.getState() != Thread.State.TERMINATED;
     }
 
+    // checks if any threads are running
     static boolean isActive() {
         return isRunning(Maze.thread);
     }
 
+    // stops current animation by setting stop to true
     static void stopAll() {
         if (isRunning(thread))
             stop = true;
