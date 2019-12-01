@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public abstract class GenMaze extends Maze {
 
-    static String[] genAlgorithms = {"Depth-first / Recursive Backtracker", "Hunt-and-Kill algorithm"}; //, "Randomised Kruskal's algorithm", "Randomized Prim's algorithm"};
+    static String[] genAlgorithms = {"Depth-first / Recursive Backtracker", "Hunt-and-Kill algorithm", "Randomised Kruskal's algorithm"}; //, "Randomized Prim's algorithm"};
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -17,6 +17,7 @@ public abstract class GenMaze extends Maze {
         for (int y = 0; y < mazeSize; y++) {
             for (int x = 0; x < mazeSize; x++) {
                 switch (super.maze[x][y]) {
+                    case NULL:
                     case WALL: // if the cell is a wall, paint dark grey
                         g.setColor(Color.DARK_GRAY);
                         g.fillRect(x * 10 + 10, y * 10 + 10, 10, 10);

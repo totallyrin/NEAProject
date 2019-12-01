@@ -6,7 +6,7 @@ import java.util.Random;
 
 public abstract class Maze extends JPanel implements Runnable {
 
-    private static Random random = new Random();
+    static Random random = new Random();
     private static Thread thread;
 
     final static int mazeSize = 35; // set the maze size

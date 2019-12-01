@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -46,7 +47,7 @@ public class Main {
         title.setText("MazeTool");
         title.setFont(new Font(null, Font.PLAIN, 30));
         JLabel version = new JLabel();
-        version.setText("v. 0.4.0");
+        version.setText("v. 0.4.1");
         text.add(title);
         text.add(version);
 
@@ -90,6 +91,10 @@ public class Main {
         hk.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
         hk.setVisible(false);
         maze.add(hk);
+        RandomisedKruskal rk = new RandomisedKruskal(); // create panel for randomised kruskal's algorithm
+        rk.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
+        rk.setVisible(false);
+        maze.add(rk);
 
         DepthSolve ds = new DepthSolve(); // create panel for depth-first solving
         ds.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
@@ -113,6 +118,7 @@ public class Main {
                     hk.setVisible(false);
                     ds.setVisible(false);
                     de.setVisible(false);
+                    rk.setVisible(false);
                     if (Objects.equals(genList.getSelectedItem(), genAlgorithms[0])) { // if depth-first is selected
                         df.hidden = !showGen.isSelected(); // set 'hidden' to either show or hide generation
                         df.rerun(); // create maze
@@ -121,6 +127,10 @@ public class Main {
                         hk.hidden = !showGen.isSelected();
                         hk.rerun(); // create maze
                         hk.setVisible(true); // show maze panel
+                    } else if (Objects.equals(genList.getSelectedItem(), genAlgorithms[2])) {
+                        rk.hidden = !showGen.isSelected();
+                        rk.rerun();
+                        rk.setVisible(true);
                     }
                 }
             }
@@ -141,6 +151,7 @@ public class Main {
                     hk.setVisible(false);
                     ds.setVisible(false);
                     de.setVisible(false);
+                    rk.setVisible(false);
                     if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[0])) {
                         ds.hidden = !showSolve.isSelected();
                         ds.rerun();
