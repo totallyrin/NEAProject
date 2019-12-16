@@ -5,12 +5,10 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Main {
@@ -47,7 +45,7 @@ public class Main {
         title.setText("MazeTool");
         title.setFont(new Font(null, Font.PLAIN, 30));
         JLabel version = new JLabel();
-        version.setText("v. 0.4.1");
+        version.setText("v. 0.4.2");
         text.add(title);
         text.add(version);
 
@@ -77,6 +75,19 @@ public class Main {
         hidden2.add(hideSolve);
         hiddenSolve.add(showSolve);
         hiddenSolve.add(hideSolve);
+
+        // create panel to control animation speed
+        JPanel speed = new JPanel();
+        JRadioButton slow = new JRadioButton("Slow");
+        JRadioButton normal = new JRadioButton("Normal", true);
+        JRadioButton fast = new JRadioButton("Fast");
+        ButtonGroup speeds = new ButtonGroup();
+        speeds.add(slow);
+        speeds.add(normal);
+        speeds.add(fast);
+        speed.add(slow);
+        speed.add(normal);
+        speed.add(fast);
 
         // create main panel to hold maze
         JPanel maze = new JPanel();
@@ -113,6 +124,11 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!Maze.isActive()) { // check that no mazes are being generated
+                    if (slow.isSelected())
+                        Maze.speed = 200;
+                    else if (fast.isSelected())
+                        Maze.speed = 50;
+                    Maze.hidden = !showGen.isSelected(); // set 'hidden' to either show or hide generation
                     emptyMaze.setVisible(false); // hide empty maze panel
                     df.setVisible(false); // make sure all maze panels are hidden
                     hk.setVisible(false);
@@ -120,15 +136,12 @@ public class Main {
                     de.setVisible(false);
                     rk.setVisible(false);
                     if (Objects.equals(genList.getSelectedItem(), genAlgorithms[0])) { // if depth-first is selected
-                        df.hidden = !showGen.isSelected(); // set 'hidden' to either show or hide generation
                         df.rerun(); // create maze
                         df.setVisible(true); // show maze panel
                     } else if (Objects.equals(genList.getSelectedItem(), genAlgorithms[1])) { // if hunt-and-kill is selected
-                        hk.hidden = !showGen.isSelected();
                         hk.rerun(); // create maze
                         hk.setVisible(true); // show maze panel
                     } else if (Objects.equals(genList.getSelectedItem(), genAlgorithms[2])) {
-                        rk.hidden = !showGen.isSelected();
                         rk.rerun();
                         rk.setVisible(true);
                     }
@@ -147,17 +160,20 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!Maze.isActive() && Maze.completedGen) { // check that no mazes are being generated
+                    if (slow.isSelected())
+                        GenMaze.speed = 100;
+                    else if (fast.isSelected())
+                        GenMaze.speed = 25;
+                    Maze.hidden = !showSolve.isSelected();
                     df.setVisible(false); // make sure all maze panels are hidden
                     hk.setVisible(false);
                     ds.setVisible(false);
                     de.setVisible(false);
                     rk.setVisible(false);
                     if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[0])) {
-                        ds.hidden = !showSolve.isSelected();
                         ds.rerun();
                         ds.setVisible(true);
                     } else if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[1])) {
-                        de.hidden = !showSolve.isSelected();
                         de.rerun();
                         de.setVisible(true);
                     }
@@ -244,11 +260,19 @@ public class Main {
         solveDrop.add(new JLabel("Solve maze using: "));
         solveDrop.add(solveList);
 
+        text.setPreferredSize(new Dimension(300, 45));
+        genDrop.setPreferredSize(new Dimension(500, 30));
+        hiddenGen.setPreferredSize(new Dimension(300, 25));
+        speed.setPreferredSize(new Dimension(300, 25));
+        solveDrop.setPreferredSize(new Dimension(500, 30));
+        hiddenSolve.setPreferredSize(new Dimension(300, 25));
+
         frame.add(panel); // adds main panel to frame
         panel.add(text); // adding things to the panel
         panel.add(genDrop);
         panel.add(hiddenGen);
         panel.add(maze);
+        panel.add(speed);
         panel.add(solveDrop);
         panel.add(hiddenSolve);
         panel.add(buttons);

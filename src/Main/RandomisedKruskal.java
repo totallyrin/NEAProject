@@ -14,6 +14,7 @@ public class RandomisedKruskal extends GenMaze {
         }
     }
 
+    /*
     @Override
     public void animate() {
         super.animate(50);
@@ -103,16 +104,18 @@ public class RandomisedKruskal extends GenMaze {
                             // merge sets
                             cells.remove(set1);
                             cells.remove(set2);
+                            walls.remove(wall);
                             set1.add(wall);
                             set1.addAll(set2);
                             cells.add(set1);
                             // set those cells to paths
                             for (int[] c : set1) {
-                                maze[c[0]][c[1]] = Mark.PATH;
-                                if (!this.hidden)
-                                    animate();
+                                if (maze[c[0]][c[1]] != Mark.PATH) {
+                                    maze[c[0]][c[1]] = Mark.PATH;
+                                    if (!this.hidden)
+                                        animate();
+                                }
                             }
-                            walls.remove(wall);
                         }
                         break;
                     case LEFT:
@@ -162,16 +165,18 @@ public class RandomisedKruskal extends GenMaze {
                             // merge sets
                             cells.remove(set1);
                             cells.remove(set2);
+                            walls.remove(wall);
                             set1.add(wall);
                             set1.addAll(set2);
                             cells.add(set1);
                             // set those cells to paths
                             for (int[] c : set1) {
-                                maze[c[0]][c[1]] = Mark.PATH;
-                                if (!this.hidden)
-                                    animate();
+                                if (maze[c[0]][c[1]] != Mark.PATH) {
+                                    maze[c[0]][c[1]] = Mark.PATH;
+                                    if (!this.hidden)
+                                        animate();
+                                }
                             }
-                            walls.remove(wall);
                         }
                         break;
                 }

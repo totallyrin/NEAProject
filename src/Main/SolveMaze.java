@@ -7,6 +7,7 @@ public abstract class SolveMaze extends Maze {
     // list of maze-solving algorithms
     static String[] solveAlgorithms = {"Depth-first / Recursive Backtracker", "Dead-end Filling"}; //, "Tremeaux's algorithm"};
     boolean fromStart = true;
+    int speed = 50;
 
     // initialises the maze
     @Override
@@ -31,7 +32,7 @@ public abstract class SolveMaze extends Maze {
     // animate at double speed
     @Override
     public void animate() {
-        super.animate(50);
+        super.animate(this.speed);
     }
 
     // controls how to paint the panel
