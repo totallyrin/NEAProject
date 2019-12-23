@@ -3,23 +3,23 @@ package Main;
 public class DepthSolve extends SolveMaze {
 
     public void run() {
-        super.clearSolution();
+        clearSolution();
         super.run();
         depthSolve(startX, startY);
-        super.maze = complete(super.maze);
-        this.hidden = false;
+        maze = complete(maze);
+        hidden = false;
         if (!stop)
             repaint();
     }
 
     private void depthSolve(int x, int y) {
         if (stop) {
-            this.hidden = true;
+            hidden = true;
             return;
         }
         if (x == endX - 1 && y == endY - 1) {
             completedSolve = true;
-            super.maze[x][y] = Mark.ROUTE;
+            maze[x][y] = Mark.ROUTE;
         }
         if (completedSolve)
             return;
@@ -31,11 +31,11 @@ public class DepthSolve extends SolveMaze {
                         continue;
                     if (completedSolve)
                         return;
-                    if (super.maze[x][y - 1] == Mark.PATH) { // check that the space is available
-                        super.maze[x][y] = Mark.ROUTE;
-                        super.maze[x][y - 1] = Mark.CURRENT;
-                        if (!this.hidden)
-                            super.animate();
+                    if (maze[x][y - 1] == Mark.PATH) { // check that the space is available
+                        maze[x][y] = Mark.ROUTE;
+                        maze[x][y - 1] = Mark.CURRENT;
+                        if (!hidden)
+                            animate();
                         depthSolve(x, y - 1);
                     }
                     break;
@@ -44,11 +44,11 @@ public class DepthSolve extends SolveMaze {
                         continue;
                     if (completedSolve)
                         return;
-                    if (super.maze[x][y + 1] == Mark.PATH) {
-                        super.maze[x][y] = Mark.ROUTE;
-                        super.maze[x][y + 1] = Mark.CURRENT;
-                        if (!this.hidden)
-                            super.animate();
+                    if (maze[x][y + 1] == Mark.PATH) {
+                        maze[x][y] = Mark.ROUTE;
+                        maze[x][y + 1] = Mark.CURRENT;
+                        if (!hidden)
+                            animate();
                         depthSolve(x, y + 1);
                     }
                     break;
@@ -57,11 +57,11 @@ public class DepthSolve extends SolveMaze {
                         continue;
                     if (completedSolve)
                         return;
-                    if (super.maze[x - 1][y] == Mark.PATH) {
-                        super.maze[x][y] = Mark.ROUTE;
-                        super.maze[x - 1][y] = Mark.CURRENT;
-                        if (!this.hidden)
-                            super.animate();
+                    if (maze[x - 1][y] == Mark.PATH) {
+                        maze[x][y] = Mark.ROUTE;
+                        maze[x - 1][y] = Mark.CURRENT;
+                        if (!hidden)
+                            animate();
                         depthSolve(x - 1, y);
                     }
                     break;
@@ -70,19 +70,19 @@ public class DepthSolve extends SolveMaze {
                         continue;
                     if (completedSolve)
                         return;
-                    if (super.maze[x + 1][y] == Mark.PATH) {
-                        super.maze[x][y] = Mark.ROUTE;
-                        super.maze[x + 1][y] = Mark.CURRENT;
-                        if (!this.hidden)
-                            super.animate();
+                    if (maze[x + 1][y] == Mark.PATH) {
+                        maze[x][y] = Mark.ROUTE;
+                        maze[x + 1][y] = Mark.CURRENT;
+                        if (!hidden)
+                            animate();
                         depthSolve(x + 1, y);
                     }
                     break;
                 default:
-                    if (super.maze[x][y] == Mark.CURRENT) {
-                        super.maze[x][y] = Mark.END;
-                        if (!this.hidden)
-                            super.animate();
+                    if (maze[x][y] == Mark.CURRENT) {
+                        maze[x][y] = Mark.END;
+                        if (!hidden)
+                            animate();
                     }
                     break;
             }
@@ -90,9 +90,9 @@ public class DepthSolve extends SolveMaze {
         }
         if (completedSolve)
             return;
-        super.maze[x][y] = Mark.END;
-        if (!this.hidden)
-            super.animate();
+        maze[x][y] = Mark.END;
+        if (!hidden)
+            animate();
     }
 
 }

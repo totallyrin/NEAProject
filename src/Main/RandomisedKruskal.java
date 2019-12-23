@@ -112,7 +112,7 @@ public class RandomisedKruskal extends GenMaze {
                             for (int[] c : set1) {
                                 if (maze[c[0]][c[1]] != Mark.PATH) {
                                     maze[c[0]][c[1]] = Mark.PATH;
-                                    if (!this.hidden)
+                                    if (!hidden)
                                         animate();
                                 }
                             }
@@ -173,7 +173,7 @@ public class RandomisedKruskal extends GenMaze {
                             for (int[] c : set1) {
                                 if (maze[c[0]][c[1]] != Mark.PATH) {
                                     maze[c[0]][c[1]] = Mark.PATH;
-                                    if (!this.hidden)
+                                    if (!hidden)
                                         animate();
                                 }
                             }

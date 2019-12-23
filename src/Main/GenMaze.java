@@ -6,6 +6,12 @@ import javax.swing.*;
 public abstract class GenMaze extends Maze {
 
     static String[] genAlgorithms = {"Depth-first / Recursive Backtracker", "Hunt-and-Kill algorithm", "Randomised Kruskal's algorithm"}; //, "Randomized Prim's algorithm"};
+    static int speed = 100;
+
+    @Override
+    public void animate() {
+        super.animate(speed);
+    }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

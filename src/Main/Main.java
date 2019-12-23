@@ -23,7 +23,7 @@ public class Main {
         // creates JFrame
         JFrame frame = new JFrame("MazeTool");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 750);
+        frame.setSize(500, 760);
         frame.setLocationRelativeTo(null);
         frame.setIconImage((new ImageIcon("img/icon.png").getImage()));
 
@@ -45,7 +45,7 @@ public class Main {
         title.setText("MazeTool");
         title.setFont(new Font(null, Font.PLAIN, 30));
         JLabel version = new JLabel();
-        version.setText("v. 0.4.2");
+        version.setText("v. 0.4.3");
         text.add(title);
         text.add(version);
 
@@ -115,6 +115,10 @@ public class Main {
         de.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
         de.setVisible(false);
         maze.add(de);
+        ChainSolve cs = new ChainSolve();
+        cs.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
+        cs.setVisible(false);
+        maze.add(cs);
 
         // create a panel for buttons so they appear side by side
         JPanel buttons = new JPanel();
@@ -125,16 +129,19 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 if (!Maze.isActive()) { // check that no mazes are being generated
                     if (slow.isSelected())
-                        Maze.speed = 200;
+                        GenMaze.speed = 200;
                     else if (fast.isSelected())
-                        Maze.speed = 50;
+                        GenMaze.speed = 50;
+                    else
+                        GenMaze.speed = 100;
                     Maze.hidden = !showGen.isSelected(); // set 'hidden' to either show or hide generation
                     emptyMaze.setVisible(false); // hide empty maze panel
                     df.setVisible(false); // make sure all maze panels are hidden
                     hk.setVisible(false);
+                    rk.setVisible(false);
                     ds.setVisible(false);
                     de.setVisible(false);
-                    rk.setVisible(false);
+                    cs.setVisible(false);
                     if (Objects.equals(genList.getSelectedItem(), genAlgorithms[0])) { // if depth-first is selected
                         df.rerun(); // create maze
                         df.setVisible(true); // show maze panel
@@ -161,21 +168,27 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 if (!Maze.isActive() && Maze.completedGen) { // check that no mazes are being generated
                     if (slow.isSelected())
-                        GenMaze.speed = 100;
+                        SolveMaze.speed = 100;
                     else if (fast.isSelected())
-                        GenMaze.speed = 25;
+                        SolveMaze.speed = 25;
+                    else
+                        SolveMaze.speed = 50;
                     Maze.hidden = !showSolve.isSelected();
                     df.setVisible(false); // make sure all maze panels are hidden
                     hk.setVisible(false);
+                    rk.setVisible(false);
                     ds.setVisible(false);
                     de.setVisible(false);
-                    rk.setVisible(false);
+                    cs.setVisible(false);
                     if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[0])) {
                         ds.rerun();
                         ds.setVisible(true);
                     } else if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[1])) {
                         de.rerun();
                         de.setVisible(true);
+                    } else if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[2])) {
+                        cs.rerun();
+                        cs.setVisible(true);
                     }
                 }
             }
@@ -262,10 +275,7 @@ public class Main {
 
         text.setPreferredSize(new Dimension(300, 45));
         genDrop.setPreferredSize(new Dimension(500, 30));
-        hiddenGen.setPreferredSize(new Dimension(300, 25));
-        speed.setPreferredSize(new Dimension(300, 25));
         solveDrop.setPreferredSize(new Dimension(500, 30));
-        hiddenSolve.setPreferredSize(new Dimension(300, 25));
 
         frame.add(panel); // adds main panel to frame
         panel.add(text); // adding things to the panel
