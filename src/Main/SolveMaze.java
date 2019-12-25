@@ -38,7 +38,7 @@ public abstract class SolveMaze extends Maze {
     // controls how to paint the panel
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        super.maze = Main.currentMaze;
+        maze = Main.currentMaze;
         if (!completedSolve && !isActive()) {
             g.setColor(bg);
             maze[1][0] = Mark.PATH;

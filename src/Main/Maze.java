@@ -45,7 +45,7 @@ public abstract class Maze extends JPanel implements Runnable {
     }
 
     // create default paint method
-    public void paintComponent(Graphics g, Mark[][] maze) {
+    /*public void paintComponent(Graphics g, Mark[][] maze) {
         super.paintComponent(g);
         g.setColor(bg);
         g.fillRect(20, 0, 10, 20); // start square
@@ -94,7 +94,7 @@ public abstract class Maze extends JPanel implements Runnable {
                 }
             }
         }
-    }
+    }*/
 
     // 'completes' the maze by setting dead ends and current cell to path
     Mark[][] complete(Mark[][] maze) {

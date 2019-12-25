@@ -45,7 +45,7 @@ public class Main {
         title.setText("MazeTool");
         title.setFont(new Font(null, Font.PLAIN, 30));
         JLabel version = new JLabel();
-        version.setText("v. 0.4.3");
+        version.setText("v. 0.4.2");
         text.add(title);
         text.add(version);
 

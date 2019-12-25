@@ -22,7 +22,7 @@ public abstract class GenMaze extends Maze {
         super.maze[mazeSize - 2][mazeSize - 1] = Mark.PATH; // joins end square to maze
         for (int y = 0; y < mazeSize; y++) {
             for (int x = 0; x < mazeSize; x++) {
-                switch (super.maze[x][y]) {
+                switch (maze[x][y]) {
                     case NULL:
                     case WALL: // if the cell is a wall, paint dark grey
                         g.setColor(Color.DARK_GRAY);
