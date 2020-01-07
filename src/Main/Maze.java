@@ -100,7 +100,7 @@ public abstract class Maze extends JPanel implements Runnable {
     Mark[][] complete(Mark[][] maze) {
         for (int x = 0; x < maze.length; x++) {
             for (int y = 0; y < maze[x].length; y++) {
-                if (maze[x][y] == Mark.CURRENT || maze[x][y] == Mark.END)
+                if (maze[x][y] == Mark.CURRENT || maze[x][y] == Mark.END || maze[x][y] == Mark.LINE)
                     maze[x][y] = Mark.PATH;
             }
         }

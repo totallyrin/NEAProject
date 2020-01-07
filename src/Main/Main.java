@@ -45,7 +45,7 @@ public class Main {
         title.setText("MazeTool");
         title.setFont(new Font(null, Font.PLAIN, 30));
         JLabel version = new JLabel();
-        version.setText("v. 0.4.2");
+        version.setText("v. 0.5.1");
         text.add(title);
         text.add(version);
 
@@ -203,7 +203,9 @@ public class Main {
                 if (!Maze.isActive() && Maze.completedGen) { // check that no mazes are being generated
                     df.setVisible(false); // make sure all maze panels are hidden
                     hk.setVisible(false);
+                    rk.setVisible(false);
                     de.setVisible(false);
+                    cs.setVisible(false);
                     ds.clearSolution();
                     ds.setVisible(true); // shows default panel for maze-solving
                 }
@@ -257,6 +259,44 @@ public class Main {
             }
         });
 
+        JButton info = new JButton("About Algorithms");
+        info.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        info.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,
+                        "Here is a brief description of the algorithms used in MazeTool:\n\n" +
+                        "Generation:\n" +
+                        "Depth First (Recursive Backtracker) - Randomly chooses a direction to travel in until it is no longer possible to travel in that direction.\n" +
+                                "The algorithm returns to previously visited cells until it is possible to travel in a new direction.\n" +
+                                "This repeats until all spaces are filled.\n" +
+                                "\n" +
+                        "Hunt-and-Kill algorithm - Similar to depth-first, randomly carve a path until you cannot go any further.\n" +
+                                "Then, iterate through every cell in the grid until you get to an unvisited cell adjacent to a visited cell,\n" +
+                                "and continue randomly carving a path from there. Repeat until all cells have been visited.\n" +
+                                "\n" +
+                        "Randomised Kruskal’s algorithm - Create a list of all walls, and make a set for each cell.\n" +
+                                "For each wall, if the cells divided by the wall belong to different sets, merge the sets and remove the wall.\n" +
+                                "Repeat until there is only one set/all other sets are empty.\n\n" +
+                        "Solving:\n" +
+                        "Depth-First (Recursive backtracker) - Randomly chooses a direction to travel in until it is no longer possible to travel in that direction.\n" +
+                                "The algorithm returns to previously visited cells until it is possible to travel in a new direction.\n" +
+                                "This repeats until the solution is found.\n" +
+                                "\n" +
+                        "Dead-end Filling - Fill in all dead ends until a junction is reached.\n" +
+                                "This should fill in all dead ends and leave only the correct way unfilled.\n" +
+                                "\n" +
+                        "Chain Algorithm - Start by drawing a straight line (or at least a line that doesn't double back on itself) from start to end,\n" +
+                                "letting it cross walls if needed, then just follow the line from start to end.\n" +
+                                "If you bump into a wall, you can't go through it, so you have to go around.\n" +
+                                "Send two wall following \"robots\" in both directions along the wall you hit.\n" +
+                                "If a robot runs into the guiding line again, and at a point which is closer to the exit, then stop,\n" +
+                                "and follow that wall yourself until you get there too. Keep following the line and repeating the process until the end is reached.\n"
+                , "About Algorithms", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+
         // add buttons to button panel
         buttons.add(genMaze);
         buttons.add(solveMaze);
@@ -267,6 +307,7 @@ public class Main {
         // add extra buttons to second panel, which will appear under the first
         JPanel buttons2 = new JPanel();
         buttons2.add(export);
+        buttons2.add(info);
 
         // add comboBox to new panel, with label
         JPanel solveDrop = new JPanel();
