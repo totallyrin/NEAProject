@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         buildGUI(); // creates GUI
     }
-
+    
     private static void buildGUI() {
         // creates JFrame
         JFrame frame = new JFrame("MazeTool");
@@ -45,7 +45,7 @@ public class Main {
         title.setText("MazeTool");
         title.setFont(new Font(null, Font.PLAIN, 30));
         JLabel version = new JLabel();
-        version.setText("v. 0.5.2");
+        version.setText("v. 0.5.3");
         text.add(title);
         text.add(version);
 
@@ -91,34 +91,21 @@ public class Main {
 
         // create main panel to hold maze
         JPanel maze = new JPanel();
-        JPanel emptyMaze = new DepthFirst(); // create panel for startup, where no maze is displayed
-        emptyMaze.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20)); // force size of panel
-        maze.add(emptyMaze);
-        DepthFirst df = new DepthFirst(); // create panel for depth-first
-        df.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        df.setVisible(false);
-        maze.add(df);
-        HuntAndKill hk = new HuntAndKill(); // create panel for hunt-and-kill
-        hk.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        hk.setVisible(false);
-        maze.add(hk);
-        RandomisedKruskal rk = new RandomisedKruskal(); // create panel for randomised kruskal's algorithm
-        rk.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        rk.setVisible(false);
-        maze.add(rk);
 
-        DepthSolve ds = new DepthSolve(); // create panel for depth-first solving
-        ds.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        ds.setVisible(false);
-        maze.add(ds);
-        DeadEnd de = new DeadEnd(); // create panel for dead-end filling
-        de.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        de.setVisible(false);
-        maze.add(de);
-        ChainSolve cs = new ChainSolve();
-        cs.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
-        cs.setVisible(false);
-        maze.add(cs);
+        JPanel emptyMaze = new DepthFirst(); // create panel for startup, where no maze is displayed
+        DepthFirst depthFirst = new DepthFirst(); // create panel for depth-first
+        HuntAndKill huntAndKill = new HuntAndKill(); // create panel for hunt-and-kill
+        RandomisedKruskal randomisedKruskal = new RandomisedKruskal(); // create panel for randomised kruskal's algorithm
+        DepthSolve depthSolve = new DepthSolve(); // create panel for depth-first solving
+        DeadEnd deadEnd = new DeadEnd(); // create panel for dead-end filling
+        ChainSolve chainSolve = new ChainSolve();
+
+        JPanel[] panels = {emptyMaze, depthFirst, huntAndKill, randomisedKruskal, depthSolve, deadEnd, chainSolve}; // add all generation/solving panels to a list for ease
+
+        setDimensions(panels); // set all generation/solving panels to the same dimensions
+        addAll(panels, maze); // add all generation/solving panels to the maze panel
+        hideAll(panels); // hide all generation/solving panels
+        emptyMaze.setVisible(true); // show empty maze panel for startup
 
         // create a panel for buttons so they appear side by side
         JPanel buttons = new JPanel();
@@ -135,22 +122,17 @@ public class Main {
                     else
                         GenMaze.speed = 100;
                     Maze.hidden = !showGen.isSelected(); // set 'hidden' to either show or hide generation
-                    emptyMaze.setVisible(false); // hide empty maze panel
-                    df.setVisible(false); // make sure all maze panels are hidden
-                    hk.setVisible(false);
-                    rk.setVisible(false);
-                    ds.setVisible(false);
-                    de.setVisible(false);
-                    cs.setVisible(false);
+                    hideAll(panels); // make sure all maze panels are hidden
+
                     if (Objects.equals(genList.getSelectedItem(), genAlgorithms[0])) { // if depth-first is selected
-                        df.rerun(); // create maze
-                        df.setVisible(true); // show maze panel
+                        depthFirst.rerun(); // create maze
+                        depthFirst.setVisible(true); // show maze panel
                     } else if (Objects.equals(genList.getSelectedItem(), genAlgorithms[1])) { // if hunt-and-kill is selected
-                        hk.rerun(); // create maze
-                        hk.setVisible(true); // show maze panel
-                    } else if (Objects.equals(genList.getSelectedItem(), genAlgorithms[2])) {
-                        rk.rerun();
-                        rk.setVisible(true);
+                        huntAndKill.rerun(); // create maze
+                        huntAndKill.setVisible(true); // show maze panel
+                    } else if (Objects.equals(genList.getSelectedItem(), genAlgorithms[2])) { // if randomised kruskal is selected
+                        randomisedKruskal.rerun();
+                        randomisedKruskal.setVisible(true);
                     }
                 }
             }
@@ -174,21 +156,17 @@ public class Main {
                     else
                         SolveMaze.speed = 50;
                     Maze.hidden = !showSolve.isSelected();
-                    df.setVisible(false); // make sure all maze panels are hidden
-                    hk.setVisible(false);
-                    rk.setVisible(false);
-                    ds.setVisible(false);
-                    de.setVisible(false);
-                    cs.setVisible(false);
+                    hideAll(panels); // make sure all maze panels are hidden
+
                     if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[0])) {
-                        ds.rerun();
-                        ds.setVisible(true);
+                        depthSolve.rerun();
+                        depthSolve.setVisible(true);
                     } else if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[1])) {
-                        de.rerun();
-                        de.setVisible(true);
+                        deadEnd.rerun();
+                        deadEnd.setVisible(true);
                     } else if (Objects.equals(solveList.getSelectedItem(), solveAlgorithms[2])) {
-                        cs.rerun();
-                        cs.setVisible(true);
+                        chainSolve.rerun();
+                        chainSolve.setVisible(true);
                     }
                 }
             }
@@ -201,13 +179,9 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!Maze.isActive() && Maze.completedGen) { // check that no mazes are being generated
-                    df.setVisible(false); // make sure all maze panels are hidden
-                    hk.setVisible(false);
-                    rk.setVisible(false);
-                    de.setVisible(false);
-                    cs.setVisible(false);
-                    ds.clearSolution();
-                    ds.setVisible(true); // shows default panel for maze-solving
+                    hideAll(panels); // make sure all maze panels are hidden
+                    depthSolve.clearSolution();
+                    depthSolve.setVisible(true); // shows default panel for maze-solving
                 }
             }
         });
@@ -333,4 +307,19 @@ public class Main {
         frame.setResizable(false); // makes the frame non-resizable
     }
 
+    private static void hideAll(JPanel[] panels) {
+        for (JPanel panel : panels)
+            panel.setVisible(false);
+    }
+
+    private static void setDimensions(JPanel[] panels) {
+        for (JPanel panel : panels)
+            panel.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
+    }
+
+    private static void addAll (JPanel[] panels, JPanel host) {
+        for (JPanel panel : panels)
+            host.add(panel);
+    }
+    
 }

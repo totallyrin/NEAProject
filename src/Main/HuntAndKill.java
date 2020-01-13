@@ -24,6 +24,10 @@ public class HuntAndKill extends GenMaze {
         maze[x][y] = Mark.CURRENT;
         Direction[] directions = getDirections();
         for (Direction direction : directions) {
+            if (stop) {
+                hidden = true;
+                return;
+            }
             switch (direction) {
                 case UP: // up
                     if (y - 2 <= 0) // check if going up would go outside of the maze
