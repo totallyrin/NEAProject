@@ -39,7 +39,7 @@ public abstract class SolveMaze extends Maze {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         maze = Main.currentMaze;
-        if (!completedSolve && !isActive()) {
+        if (!completedSolve && notActive()) {
             g.setColor(bg);
             maze[1][0] = Mark.PATH;
         } else {

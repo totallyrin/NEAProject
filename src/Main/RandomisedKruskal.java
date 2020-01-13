@@ -37,7 +37,7 @@ public class RandomisedKruskal extends GenMaze {
         ArrayList<HashSet<int[]>> cells = new ArrayList<>();
         for (int j = 1; j < mazeSize - 1; j += 2) {
             for (int i = 1; i < mazeSize - 1; i += 2) {
-                cells.add(new HashSet<int[]>(Collections.singleton(new int[]{i, j})));
+                cells.add(new HashSet<>(Collections.singleton(new int[]{i, j})));
             }
         }
         while (cells.size() > 1) {
@@ -81,6 +81,8 @@ public class RandomisedKruskal extends GenMaze {
                                 break;
                         }
                         // check if cells are in the same set
+                        assert set1 != null;
+                        assert set2 != null;
                         boolean same = false;
                         for (int[] j : set1) {
                             for (int[] k : set2) {
@@ -142,6 +144,8 @@ public class RandomisedKruskal extends GenMaze {
                                 break;
                         }
                         // check if cells are in the same set
+                        assert set1 != null;
+                        assert set2 != null;
                         same = false;
                         for (int[] j : set1) {
                             for (int[] k : set2) {

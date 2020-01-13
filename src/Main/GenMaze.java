@@ -1,7 +1,6 @@
 package Main;
 
 import java.awt.*;
-import javax.swing.*;
 
 public abstract class GenMaze extends Maze {
 

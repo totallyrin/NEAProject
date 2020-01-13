@@ -35,7 +35,7 @@ public class DeadEnd extends SolveMaze {
                 if (completedSolve)
                     return;
                 if ((i == startX) && (j == startY)) {
-                    // do nothing
+                    assert true; // do nothing
                 } else if ((i == endX - 1) && (j == endY)) {
                     // do nothing
                     completedSolve = true;

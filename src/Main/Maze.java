@@ -170,27 +170,11 @@ public abstract class Maze extends JPanel implements Runnable {
 
     }
 
-    // returns the direction of the neighbouring cell of choice
-    static Direction neighbourDirection(Mark[][] grid, int x, int y, Mark type) {
-        Direction neighbour = Direction.NULL;
-        if (x - 1 > 0 && grid[x - 1][y] == type)
-            neighbour = Direction.LEFT;
-        else if (x + 1 < mazeSize && grid[x + 1][y] == type)
-            neighbour = Direction.RIGHT;
-        else if (y - 1 > 0 && grid[x][y - 1] == type)
-            neighbour = Direction.UP;
-        else if (y + 1 < mazeSize && grid[x][y + 1] == type)
-            neighbour = Direction.DOWN;
-        return neighbour;
-
-    }
-
     // causes current thread to sleep for x amount of time
     private static void sleep(int time) {
         try {
             Thread.sleep(time);
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (Exception ignored) {
         }
     }
 
@@ -226,8 +210,8 @@ public abstract class Maze extends JPanel implements Runnable {
     }
 
     // checks if any threads are running
-    static boolean isActive() {
-        return isRunning(Maze.thread);
+    static boolean notActive() {
+        return !isRunning(Maze.thread);
     }
 
     // stops current animation by setting stop to true
