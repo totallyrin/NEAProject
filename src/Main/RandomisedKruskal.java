@@ -15,12 +15,6 @@ public class RandomisedKruskal extends GenMaze {
     }
 
     /*
-    @Override
-    public void animate() {
-        super.animate(50);
-    }
-
-    /*
     Create a list of all walls, and make a set for each cell.
     For each wall, if the cells divided by the wall belong to different sets, merge the sets and remove the wall.
     Repeat until there is only one set/all other sets are empty.

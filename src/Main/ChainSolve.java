@@ -38,13 +38,14 @@ public class ChainSolve extends SolveMaze {
         if (completedSolve)
             return;
         if (x == startX && y == startY) {
+            fromStart = false;
             for (int i = 1; i < mazeSize - 1; i++) {
                 if (maze[i][i] != Mark.WALL)
                     maze[i][i] = Mark.LINE;
                 animate();
             }
+            fromStart = true;
         }
-        maze[x][y] = Mark.ROUTE;
         findRoute(x, y);
     }
 
@@ -57,7 +58,6 @@ public class ChainSolve extends SolveMaze {
             completedSolve = true;
         if (completedSolve) // return if complete
             return;
-        maze[x][y] = Mark.ROUTE;
         if (random.nextInt(1) == 0)
             followerRight(x, y);
         else
@@ -78,8 +78,8 @@ public class ChainSolve extends SolveMaze {
         // right
         if (x + 1 < mazeSize) {
             if (maze[x + 1][y] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
                 chainSolve(x + 1, y);
-                return;
             }
             else if (maze[x + 1][y] == Mark.PATH) {
                 maze[x][y] = Mark.ROUTE;
@@ -94,8 +94,8 @@ public class ChainSolve extends SolveMaze {
         // down
         if (y + 1 < mazeSize) {
             if (maze[x][y + 1] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
                 chainSolve(x, y + 1);
-                return;
             }
             else if (maze[x][y + 1] == Mark.PATH) {
                 maze[x][y] = Mark.ROUTE;
@@ -110,8 +110,8 @@ public class ChainSolve extends SolveMaze {
         // up
         if (y - 1 > 0) {// check if going up would go outside of the maze
             if (maze[x][y - 1] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
                 chainSolve(x, y - 1);
-                return;
             }
             else if (maze[x][y - 1] == Mark.PATH) { // check that the space is available
                 maze[x][y] = Mark.ROUTE;
@@ -126,8 +126,8 @@ public class ChainSolve extends SolveMaze {
         // left
         if (x - 1 > 0) {
             if (maze[x - 1][y] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
                 chainSolve(x - 1, y);
-                return;
             }
             else if (maze[x - 1][y] == Mark.PATH) {
                 maze[x][y] = Mark.ROUTE;
@@ -139,6 +139,8 @@ public class ChainSolve extends SolveMaze {
                     return;
             }
         }
+        if (completedSolve)
+            return;
         maze[x][y] = Mark.END;
         if (!hidden)
             animate();
@@ -158,8 +160,8 @@ public class ChainSolve extends SolveMaze {
         // left
         if (x - 1 > 0) {
             if (maze[x - 1][y] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
                 chainSolve(x - 1, y);
-                return;
             }
             else if (maze[x - 1][y] == Mark.PATH) {
                 maze[x][y] = Mark.ROUTE;
@@ -174,8 +176,8 @@ public class ChainSolve extends SolveMaze {
         // up
         if (y - 1 > 0) {// check if going up would go outside of the maze
             if (maze[x][y - 1] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
                 chainSolve(x, y - 1);
-                return;
             }
             else if (maze[x][y - 1] == Mark.PATH) { // check that the space is available
                 maze[x][y] = Mark.ROUTE;
@@ -190,8 +192,8 @@ public class ChainSolve extends SolveMaze {
         // right
         if (x + 1 < mazeSize) {
             if (maze[x + 1][y] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
                 chainSolve(x + 1, y);
-                return;
             }
             else if (maze[x + 1][y] == Mark.PATH) {
                 maze[x][y] = Mark.ROUTE;
@@ -206,8 +208,8 @@ public class ChainSolve extends SolveMaze {
         // down
         if (y + 1 < mazeSize) {
             if (maze[x][y + 1] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
                 chainSolve(x, y - 1);
-                return;
             }
             else if (maze[x][y + 1] == Mark.PATH) {
                 maze[x][y] = Mark.ROUTE;
@@ -219,6 +221,8 @@ public class ChainSolve extends SolveMaze {
                     return;
             }
         }
+        if (completedSolve)
+            return;
         maze[x][y] = Mark.END;
         if (!hidden)
             animate();

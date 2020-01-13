@@ -4,10 +4,6 @@ public class HuntAndKill extends GenMaze {
 
     private int row = 1, column = 1;
 
-    HuntAndKill() {
-        initMaze();
-    }
-
     public void run() {
         super.run();
         row = 1;
