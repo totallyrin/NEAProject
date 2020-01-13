@@ -42,7 +42,8 @@ public class ChainSolve extends SolveMaze {
             for (int i = 1; i < mazeSize - 1; i++) {
                 if (maze[i][i] != Mark.WALL)
                     maze[i][i] = Mark.LINE;
-                animate();
+                if (!hidden)
+                    animate();
             }
             fromStart = true;
         }
