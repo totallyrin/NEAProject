@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         buildGUI(); // creates GUI
     }
-    
+
     private static void buildGUI() {
         // creates JFrame
         JFrame frame = new JFrame("MazeTool");
@@ -240,33 +240,33 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,
                         "Here is a brief description of the algorithms used in MazeTool:\n\n" +
-                        "Generation:\n" +
-                        "Depth First (Recursive Backtracker) - Randomly chooses a direction to travel in until it is no longer possible to travel in that direction.\n" +
+                                "Generation:\n" +
+                                "Depth First (Recursive Backtracker) - Randomly chooses a direction to travel in until it is no longer possible to travel in that direction.\n" +
                                 "The algorithm returns to previously visited cells until it is possible to travel in a new direction.\n" +
                                 "This repeats until all spaces are filled.\n" +
                                 "\n" +
-                        "Hunt-and-Kill algorithm - Similar to depth-first, randomly carve a path until you cannot go any further.\n" +
+                                "Hunt-and-Kill algorithm - Similar to depth-first, randomly carve a path until you cannot go any further.\n" +
                                 "Then, iterate through every cell in the grid until you get to an unvisited cell adjacent to a visited cell,\n" +
                                 "and continue randomly carving a path from there. Repeat until all cells have been visited.\n" +
                                 "\n" +
-                        "Randomised Kruskal’s algorithm - Create a list of all walls, and make a set for each cell.\n" +
+                                "Randomised Kruskal’s algorithm - Create a list of all walls, and make a set for each cell.\n" +
                                 "For each wall, if the cells divided by the wall belong to different sets, merge the sets and remove the wall.\n" +
                                 "Repeat until there is only one set/all other sets are empty.\n\n" +
-                        "Solving:\n" +
-                        "Depth-First (Recursive backtracker) - Randomly chooses a direction to travel in until it is no longer possible to travel in that direction.\n" +
+                                "Solving:\n" +
+                                "Depth-First (Recursive backtracker) - Randomly chooses a direction to travel in until it is no longer possible to travel in that direction.\n" +
                                 "The algorithm returns to previously visited cells until it is possible to travel in a new direction.\n" +
                                 "This repeats until the solution is found.\n" +
                                 "\n" +
-                        "Dead-end Filling - Fill in all dead ends until a junction is reached.\n" +
+                                "Dead-end Filling - Fill in all dead ends until a junction is reached.\n" +
                                 "This should fill in all dead ends and leave only the correct way unfilled.\n" +
                                 "\n" +
-                        "Chain Algorithm - Start by drawing a straight line (or at least a line that doesn't double back on itself) from start to end,\n" +
+                                "Chain Algorithm - Start by drawing a straight line (or at least a line that doesn't double back on itself) from start to end,\n" +
                                 "letting it cross walls if needed, then just follow the line from start to end.\n" +
                                 "If you bump into a wall, you can't go through it, so you have to go around.\n" +
                                 "Send two wall following \"robots\" in both directions along the wall you hit.\n" +
                                 "If a robot runs into the guiding line again, and at a point which is closer to the exit, then stop,\n" +
                                 "and follow that wall yourself until you get there too. Keep following the line and repeating the process until the end is reached.\n"
-                , "About Algorithms", JOptionPane.INFORMATION_MESSAGE);
+                        , "About Algorithms", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -317,9 +317,9 @@ public class Main {
             panel.setPreferredSize(new Dimension(Maze.mazeSize * 10 + 20, Maze.mazeSize * 10 + 20));
     }
 
-    private static void addAll (JPanel[] panels, JPanel host) {
+    private static void addAll(JPanel[] panels, JPanel host) {
         for (JPanel panel : panels)
             host.add(panel);
     }
-    
+
 }

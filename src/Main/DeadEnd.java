@@ -26,8 +26,8 @@ public class DeadEnd extends SolveMaze {
         }
         if (completedSolve)
             return;
-        for (int j = 1; j < mazeSize; j++){
-            for (int i = 0; i < mazeSize; i++){
+        for (int j = 1; j < mazeSize; j++) {
+            for (int i = 0; i < mazeSize; i++) {
                 if (stop) {
                     hidden = true;
                     return;
@@ -36,13 +36,11 @@ public class DeadEnd extends SolveMaze {
                     return;
                 if ((i == startX) && (j == startY)) {
                     // do nothing
-                }
-                else if ((i == endX-1) && (j == endY)) {
+                } else if ((i == endX - 1) && (j == endY)) {
                     // do nothing
                     completedSolve = true;
                     return;
-                }
-                else if (maze[i][j] == Mark.PATH) {
+                } else if (maze[i][j] == Mark.PATH) {
                     if (checkNeighbours(maze, i, j, Mark.PATH) == 1) {
                         if (!hidden)
                             animate();
