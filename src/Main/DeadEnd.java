@@ -37,7 +37,7 @@ public class DeadEnd extends SolveMaze {
                 if ((i == startX) && (j == startY)) {
                     assert true; // do nothing
                 } else if ((i == endX - 1) && (j == endY)) {
-                    // do nothing
+                    // if end is reached, maze is complete
                     completedSolve = true;
                     return;
                 } else if (maze[i][j] == Mark.PATH) {
