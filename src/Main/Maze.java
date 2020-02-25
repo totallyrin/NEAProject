@@ -12,7 +12,7 @@ public abstract class Maze extends JPanel implements Runnable {
     final static int mazeSize = 35; // set the maze size
     final int startX = 1, startY = 1, endX = mazeSize - 1, endY = mazeSize - 1;
 
-    static Color bg = new Color(238, 238, 238), red = new Color(247, 73, 57), blue = new Color(0, 149, 255), yellow = new Color(255, 187, 0), green = new Color(120, 200, 50);
+    final static Color bg = new Color(238, 238, 238), red = new Color(247, 73, 57), blue = new Color(0, 149, 255), yellow = new Color(255, 187, 0), green = new Color(120, 200, 50);
     static int speed = 100;
 
     volatile static boolean stop = false;
