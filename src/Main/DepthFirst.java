@@ -2,9 +2,11 @@ package Main;
 
 public class DepthFirst extends GenMaze {
 
+    // method to start generation process
     public void run() {
         super.run();
         depthFirstGeneration(startX, startY);
+        // repaint the maze when completed
         if (!stop) {
             completedGen = true;
             Main.currentMaze = complete(maze);
@@ -21,19 +23,19 @@ public class DepthFirst extends GenMaze {
                 return;
             }
             switch (direction) {
-                case UP: // up
-                    if (y - 2 <= 0) // check if going up would go outside of the maze
+                case UP:                                    // up
+                    if (y - 2 <= 0)                         // check if going up would go outside of the maze
                         continue;
-                    if (maze[x][y - 2] == Mark.WALL) { // check that the space is available
-                        maze[x][y] = Mark.PATH; // sets 'current' cell to no longer be current
-                        maze[x][y - 1] = Mark.PATH; // sets the spaces ahead to a path
+                    if (maze[x][y - 2] == Mark.WALL) {      // check that the space is available
+                        maze[x][y] = Mark.PATH;             // sets 'current' cell to no longer be current
+                        maze[x][y - 1] = Mark.PATH;         // sets the spaces ahead to a path
                         maze[x][y - 2] = Mark.CURRENT;
                         if (!hidden)
                             animate();
-                        depthFirstGeneration(x, y - 2); // call the same subroutine using the new coordinates
+                        depthFirstGeneration(x, y - 2);  // call the same subroutine using the new coordinates
                     }
                     break;
-                case DOWN: // down
+                case DOWN:                                  // down
                     if (y + 2 >= mazeSize)
                         continue;
                     if (maze[x][y + 2] == Mark.WALL) {
@@ -45,7 +47,7 @@ public class DepthFirst extends GenMaze {
                         depthFirstGeneration(x, y + 2);
                     }
                     break;
-                case LEFT: // left
+                case LEFT:                                  // left
                     if (x - 2 <= 0)
                         continue;
                     if (maze[x - 2][y] == Mark.WALL) {
@@ -57,7 +59,7 @@ public class DepthFirst extends GenMaze {
                         depthFirstGeneration(x - 2, y);
                     }
                     break;
-                case RIGHT: // right
+                case RIGHT:                                  // right
                     if (x + 2 >= mazeSize)
                         continue;
                     if (maze[x + 2][y] == Mark.WALL) {
@@ -71,6 +73,7 @@ public class DepthFirst extends GenMaze {
                     break;
             }
         }
+        // when cannot go any further, set that cell to a dead end
         if (maze[x][y] == Mark.CURRENT) {
             maze[x][y] = Mark.END;
         }

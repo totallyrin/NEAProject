@@ -9,19 +9,28 @@ public abstract class Maze extends JPanel implements Runnable {
     static Random random = new Random();
     private static Thread thread;
 
-    final static int mazeSize = 35; // set the maze size
+    // set the maze size
+    final static int mazeSize = 35;
+    // set start and end coordinates
     final int startX = 1, startY = 1, endX = mazeSize - 1, endY = mazeSize - 1;
 
+    // set colours used in maze generation
     final static Color bg = new Color(238, 238, 238), red = new Color(247, 73, 57), blue = new Color(0, 149, 255), yellow = new Color(255, 187, 0), green = new Color(120, 200, 50);
+
+    // set default animation speed
     static int speed = 100;
 
+    // boolean flag to stop current process
     volatile static boolean stop = false;
+    // boolean to indicate completion of a process
     static boolean completedGen = false, completedSolve = false;
+    // boolean to indicate whether process should be hidden or not
     static boolean hidden = false;
 
+    // maze array, where each value represents a cell in the maze
     Mark[][] maze = new Mark[mazeSize][mazeSize];
 
-    // makes sure panel is blank, and that background colour is dark grey
+    // makes sure panel is blank, and that background colour is dark grey on construction
     Maze() {
         initMaze();
         this.setBackground(Color.DARK_GRAY);
@@ -57,16 +66,16 @@ public abstract class Maze extends JPanel implements Runnable {
 
     // returns an array of directions in a random order
     static Direction[] getDirections() {
-        Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT}; // create an array with the 4 valid directions
-        Direction[] shuffle = new Direction[4]; // create an empty array for the shuffled set of directions
+        Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};   // create an array with the 4 valid directions
+        Direction[] shuffle = new Direction[4];                                                     // create an empty array for the shuffled set of directions
         for (int i = 0; i < directions.length; i++) {
-            int rand = random.nextInt(directions.length); // choose a random number from 0-3
-            while (directions[rand] == Direction.NULL) { // if the direction it chooses is not valid
-                rand = random.nextInt(directions.length); // continue generating numbers until it can choose a valid direction
+            int rand = random.nextInt(directions.length);                                           // choose a random number from 0-3
+            while (directions[rand] == Direction.NULL) {                                            // if the direction it chooses is not valid
+                rand = random.nextInt(directions.length);                                           // continue generating numbers until it can choose a valid direction
             }
-            Direction temp = directions[rand]; // get the chosen direction
-            directions[rand] = Direction.NULL; // set the space to null
-            shuffle[i] = temp; // put the chosen direction in the correct space in the shuffled array
+            Direction temp = directions[rand];                                                      // get the chosen direction
+            directions[rand] = Direction.NULL;                                                      // set the space to null
+            shuffle[i] = temp;                                                                      // put the chosen direction in the correct space in the shuffled array
         }
         return shuffle;
     }
@@ -74,14 +83,14 @@ public abstract class Maze extends JPanel implements Runnable {
     // checks for number of neighbouring walls
     static int checkNeighbours(Mark[][] grid, int x, int y) {
         int neighbours = 0;
-        if ((x >= 0 && x < grid.length) && (y >= 0 && y < grid[x].length)) {
-            if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)
+        if ((x >= 0 && x < grid.length) && (y >= 0 && y < grid[x].length)) {    // check that x and y values are not out of bounds
+            if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)                       // check neighbour on left side
                 neighbours++;
-            if (x + 1 < mazeSize && grid[x + 1][y] != Mark.WALL)
+            if (x + 1 < mazeSize && grid[x + 1][y] != Mark.WALL)                // check neighbour on right side
                 neighbours++;
-            if (y - 1 > 0 && grid[x][y - 1] != Mark.WALL)
+            if (y - 1 > 0 && grid[x][y - 1] != Mark.WALL)                       // check neighbour above
                 neighbours++;
-            if (y + 1 < mazeSize && grid[x][y + 1] != Mark.WALL)
+            if (y + 1 < mazeSize && grid[x][y + 1] != Mark.WALL)                // check neighbour below
                 neighbours++;
         }
         return neighbours;
@@ -90,14 +99,14 @@ public abstract class Maze extends JPanel implements Runnable {
     // checks for number of neighbouring cells of choice
     static int checkNeighbours(Mark[][] grid, int x, int y, Mark type) {
         int neighbours = 0;
-        if ((x >= 0 && x < grid.length) && (y >= 0 && y < grid[x].length)) {
-            if (x - 1 > 0 && grid[x - 1][y] == type)
+        if ((x >= 0 && x < grid.length) && (y >= 0 && y < grid[x].length)) {    // check that x and y values are not out of bounds
+            if (x - 1 > 0 && grid[x - 1][y] == type)                            // check neighbour on left side
                 neighbours++;
-            if (x + 1 < mazeSize && grid[x + 1][y] == type)
+            if (x + 1 < mazeSize && grid[x + 1][y] == type)                     // check neighbour on right side
                 neighbours++;
-            if (y - 1 > 0 && grid[x][y - 1] == type)
+            if (y - 1 > 0 && grid[x][y - 1] == type)                            // check neighbour above
                 neighbours++;
-            if (y + 1 < mazeSize && grid[x][y + 1] == type)
+            if (y + 1 < mazeSize && grid[x][y + 1] == type)                     // check neighbour below
                 neighbours++;
         }
         return neighbours;
@@ -106,13 +115,13 @@ public abstract class Maze extends JPanel implements Runnable {
     // returns the direction of the neighbouring wall
     static Direction neighbourDirection(Mark[][] grid, int x, int y) {
         Direction neighbour = Direction.NULL;
-        if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)
+        if (x - 1 > 0 && grid[x - 1][y] != Mark.WALL)                   // check left side
             neighbour = Direction.LEFT;
-        else if (x + 1 < mazeSize && grid[x + 1][y] != Mark.WALL)
+        else if (x + 1 < mazeSize && grid[x + 1][y] != Mark.WALL)       // check right side
             neighbour = Direction.RIGHT;
-        else if (y - 1 > 0 && grid[x][y - 1] != Mark.WALL)
+        else if (y - 1 > 0 && grid[x][y - 1] != Mark.WALL)              // check above
             neighbour = Direction.UP;
-        else if (y + 1 < mazeSize && grid[x][y + 1] != Mark.WALL)
+        else if (y + 1 < mazeSize && grid[x][y + 1] != Mark.WALL)       // check below
             neighbour = Direction.DOWN;
         return neighbour;
 

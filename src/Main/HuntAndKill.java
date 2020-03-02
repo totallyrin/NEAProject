@@ -2,13 +2,17 @@ package Main;
 
 public class HuntAndKill extends GenMaze {
 
+    // store current row and column
     private int row = 1, column = 1;
 
+    // method to run the maze generation process
     public void run() {
         super.run();
+        // reset row and column to 1
         row = 1;
         column = 1;
         huntAndKill(startX, startY);
+        // repaints the completed maze
         if (!stop) {
             completedGen = true;
             Main.currentMaze = complete(maze);
@@ -29,19 +33,19 @@ public class HuntAndKill extends GenMaze {
                 return;
             }
             switch (direction) {
-                case UP: // up
-                    if (y - 2 <= 0) // check if going up would go outside of the maze
+                case UP:                                // if direction chosen is up
+                    if (y - 2 <= 0)                     // check if going up would go outside of the maze
                         continue;
-                    if (maze[x][y - 2] == Mark.WALL) { // check that the space is available
-                        maze[x][y] = Mark.PATH; // sets 'current' maze to no longer be current
-                        maze[x][y - 1] = Mark.PATH; // sets the spaces ahead to a path
+                    if (maze[x][y - 2] == Mark.WALL) {  // check that the space is available
+                        maze[x][y] = Mark.PATH;         // sets 'current' maze to no longer be current
+                        maze[x][y - 1] = Mark.PATH;     // sets the spaces ahead to a path
                         maze[x][y - 2] = Mark.CURRENT;
                         if (!hidden)
                             animate();
-                        huntAndKill(x, y - 2); // call the same subroutine using the new coordinates
+                        huntAndKill(x, y - 2);       // call the same subroutine using the new coordinates
                     }
                     break;
-                case DOWN: // down
+                case DOWN:                              // if direction chosen is down
                     if (y + 2 >= mazeSize)
                         continue;
                     if (maze[x][y + 2] == Mark.WALL) {
@@ -53,7 +57,7 @@ public class HuntAndKill extends GenMaze {
                         huntAndKill(x, y + 2);
                     }
                     break;
-                case LEFT: // left
+                case LEFT:                              // if direction chosen is left
                     if (x - 2 <= 0)
                         continue;
                     if (maze[x - 2][y] == Mark.WALL) {
@@ -65,7 +69,7 @@ public class HuntAndKill extends GenMaze {
                         huntAndKill(x - 2, y);
                     }
                     break;
-                case RIGHT: // right
+                case RIGHT:                             // if direction chosen is right
                     if (x + 2 >= mazeSize)
                         continue;
                     if (maze[x + 2][y] == Mark.WALL) {
@@ -89,8 +93,8 @@ public class HuntAndKill extends GenMaze {
 
     private void hunt() {
         Mark temp;
-        for (int y = row; y < mazeSize - 1; y++) { // going down
-            for (int x = column; x < mazeSize - 1; x++) { // going across (right)
+        for (int y = row; y < mazeSize - 1; y++) {           // going down
+            for (int x = column; x < mazeSize - 1; x++) {    // going across (right)
                 if (stop) {
                     hidden = true;
                     return;
@@ -100,9 +104,10 @@ public class HuntAndKill extends GenMaze {
                 if (!hidden)
                     animate(25);
                 maze[x][y] = temp;
-                if (maze[x][y] == Mark.WALL && checkNeighbours(maze, x, y) == 1) { // checks that the current cell has only one neighbouring wall
+                // checks that the current cell has only one neighbouring wall
+                if (maze[x][y] == Mark.WALL && checkNeighbours(maze, x, y) == 1) {
                     switch (neighbourDirection(maze, x, y)) {
-                        case UP:
+                        case UP:                                                                // if direction chosen is up
                             if (checkNeighbours(maze, x, y + 1) == 0) {
                                 maze[x][y] = Mark.PATH;
                                 maze[x][y + 1] = Mark.PATH;
@@ -112,7 +117,7 @@ public class HuntAndKill extends GenMaze {
                                 return;
                             }
                             break;
-                        case DOWN:
+                        case DOWN:                                                              // if direction chosen is down
                             if (y - 1 > 0 && checkNeighbours(maze, x, y - 1) == 0) {
                                 maze[x][y] = Mark.PATH;
                                 maze[x][y - 1] = Mark.PATH;
@@ -122,7 +127,7 @@ public class HuntAndKill extends GenMaze {
                                 return;
                             }
                             break;
-                        case LEFT:
+                        case LEFT:                                                              // if direction chosen is left
                             if (checkNeighbours(maze, x + 1, y) == 0) {
                                 maze[x][y] = Mark.PATH;
                                 maze[x + 1][y] = Mark.PATH;
@@ -132,7 +137,7 @@ public class HuntAndKill extends GenMaze {
                                 return;
                             }
                             break;
-                        case RIGHT:
+                        case RIGHT:                                                             // if direction chosen is right
                             if (x - 1 > 0 && checkNeighbours(maze, x - 1, y) == 0) {
                                 maze[x][y] = Mark.PATH;
                                 maze[x - 1][y] = Mark.PATH;

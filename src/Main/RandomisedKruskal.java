@@ -4,9 +4,11 @@ import java.util.*;
 
 public class RandomisedKruskal extends GenMaze {
 
+    // method to run the generation process
     public void run() {
         super.run();
         kruskalGen();
+        // repaints the completed maze
         if (!stop) {
             completedGen = true;
             Main.currentMaze = super.complete(super.maze);
@@ -40,17 +42,19 @@ public class RandomisedKruskal extends GenMaze {
                 cells.add(new HashSet<>(Collections.singleton(new int[]{i, j})));
             }
         }
+        // while there is more than one set
         while (cells.size() > 1) {
             HashSet<int[]> set1 = null, set2 = null;
             if (stop)
                 return;
-            // choose a random wall, get coords of that wall
+            // choose a random wall, get coordinates of that wall
             int rand = random.nextInt(walls.size());
             int[] wall = walls.get(rand);
             int x = wall[0], y = wall[1];
             if (!((x % 2 == 0) && (y % 2 == 0))) {
                 // choose random direction
                 switch (getDirections()[0]) {
+                    // if direction chosen is up or down
                     case UP:
                     case DOWN:
                         if (y - 1 <= 0)
@@ -114,6 +118,7 @@ public class RandomisedKruskal extends GenMaze {
                             }
                         }
                         break;
+                    // if random direction is left or right
                     case LEFT:
                     case RIGHT:
                         if (x - 1 <= 0)

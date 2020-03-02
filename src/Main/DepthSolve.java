@@ -2,6 +2,7 @@ package Main;
 
 public class DepthSolve extends SolveMaze {
 
+    // method to start solving
     public void run() {
         clearSolution();
         super.run();
@@ -27,11 +28,13 @@ public class DepthSolve extends SolveMaze {
         for (Direction direction : directions) {
             switch (direction) {
                 case UP: // up
-                    if (y - 1 <= 0) // check if going up would go outside of the maze
+                    // check if going up would go outside of the maze
+                    if (y - 1 <= 0)
                         continue;
                     if (completedSolve)
                         return;
-                    if (maze[x][y - 1] == Mark.PATH) { // check that the space is available
+                    // check that the space is available
+                    if (maze[x][y - 1] == Mark.PATH) {
                         maze[x][y] = Mark.ROUTE;
                         maze[x][y - 1] = Mark.CURRENT;
                         if (!hidden)
@@ -90,6 +93,7 @@ public class DepthSolve extends SolveMaze {
         }
         if (completedSolve)
             return;
+        // mark as dead end if cannot go any further
         maze[x][y] = Mark.END;
         if (!hidden)
             animate();
