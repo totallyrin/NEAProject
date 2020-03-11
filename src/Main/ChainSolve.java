@@ -112,22 +112,6 @@ public class ChainSolve extends SolveMaze {
                     return;
             }
         }
-        // left
-        if (x - 1 > 0) {
-            // if the cell to the left is part of the line, start process from there
-            if (maze[x - 1][y] == Mark.LINE) {
-                maze[x][y] = Mark.ROUTE;
-                chainSolve(x - 1, y);
-            } else if (maze[x - 1][y] == Mark.PATH) {
-                maze[x][y] = Mark.ROUTE;
-                maze[x - 1][y] = Mark.CURRENT;
-                if (!hidden)
-                    animate();
-                followerRight(x - 1, y);
-                if (completedSolve)
-                    return;
-            }
-        }
         // up
         if (y - 1 > 0) {
             // if the cell above is part of the line, start process from there
@@ -140,6 +124,22 @@ public class ChainSolve extends SolveMaze {
                 if (!hidden)
                     animate();
                 followerRight(x, y - 1);
+                if (completedSolve)
+                    return;
+            }
+        }
+        // left
+        if (x - 1 > 0) {
+            // if the cell to the left is part of the line, start process from there
+            if (maze[x - 1][y] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
+                chainSolve(x - 1, y);
+            } else if (maze[x - 1][y] == Mark.PATH) {
+                maze[x][y] = Mark.ROUTE;
+                maze[x - 1][y] = Mark.CURRENT;
+                if (!hidden)
+                    animate();
+                followerRight(x - 1, y);
                 if (completedSolve)
                     return;
             }
@@ -197,22 +197,6 @@ public class ChainSolve extends SolveMaze {
                     return;
             }
         }
-        // right
-        if (x + 1 < mazeSize) {
-            // if the cell to the right is part of the line, start process from there
-            if (maze[x + 1][y] == Mark.LINE) {
-                maze[x][y] = Mark.ROUTE;
-                chainSolve(x + 1, y);
-            } else if (maze[x + 1][y] == Mark.PATH) {
-                maze[x][y] = Mark.ROUTE;
-                maze[x + 1][y] = Mark.CURRENT;
-                if (!hidden)
-                    animate();
-                followerLeft(x + 1, y);
-                if (completedSolve)
-                    return;
-            }
-        }
         // up
         if (y - 1 > 0) {
             // if the cell above is part of the line, start process from there
@@ -225,6 +209,22 @@ public class ChainSolve extends SolveMaze {
                 if (!hidden)
                     animate();
                 followerLeft(x, y - 1);
+                if (completedSolve)
+                    return;
+            }
+        }
+        // right
+        if (x + 1 < mazeSize) {
+            // if the cell to the right is part of the line, start process from there
+            if (maze[x + 1][y] == Mark.LINE) {
+                maze[x][y] = Mark.ROUTE;
+                chainSolve(x + 1, y);
+            } else if (maze[x + 1][y] == Mark.PATH) {
+                maze[x][y] = Mark.ROUTE;
+                maze[x + 1][y] = Mark.CURRENT;
+                if (!hidden)
+                    animate();
+                followerLeft(x + 1, y);
                 if (completedSolve)
                     return;
             }
