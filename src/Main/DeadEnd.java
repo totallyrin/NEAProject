@@ -8,17 +8,18 @@ public class DeadEnd extends SolveMaze {
         super.run();
         fromStart = false;
         deadEnd();
-        // set the unfilled route to 'route' cells after solving is complete for user to see correct route
-        for (int j = 0; j < mazeSize; j++) {
-            for (int i = 0; i < mazeSize; i++) {
-                if (maze[i][j] == Mark.PATH)
-                    maze[i][j] = Mark.ROUTE;
+        if (!stop) {
+            // set the unfilled route to 'route' cells after solving is complete for user to see correct route
+            for (int j = 0; j < mazeSize; j++) {
+                for (int i = 0; i < mazeSize; i++) {
+                    if (maze[i][j] == Mark.PATH)
+                        maze[i][j] = Mark.ROUTE;
+                }
             }
-        }
-        fromStart = true;
-        maze = complete(maze);
-        if (!stop)
+            fromStart = true;
+            maze = complete(maze);
             repaint();
+        }
     }
 
     private void deadEnd() {
